@@ -1,29 +1,43 @@
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class Paquet {
-    Carte[] cartes;
+    ArrayList<Carte> cartes;
 
     public Paquet() {
-        this.cartes = new Carte[0];
+        this.cartes = new ArrayList<Carte>();
     }
 
-    public Paquet(Carte[] cartes) {
+    public Paquet(ArrayList<Carte> cartes) {
         this.cartes = cartes;
     }
 
+    public void melanger() {
+        java.util.Collections.shuffle(this.cartes);
+    }
+
     public void ajouterCarte(Carte carte) {
-        // ??
+        this.cartes.add(carte);
+    }
+
+    public void retirerCarte(Carte carte) {
+        this.cartes.remove(carte);
     }
 
     public Carte getCarteDessus() {
-        return this.cartes[this.cartes.length - 1];
+        return this.cartes.removeLast();
     }
 
-    public Carte[] getCartes() {
+    public void distribuer(Joueur joueur, int nbCartes){
+        for (int i = 0; i < nbCartes; i++) {
+            joueur.main.ajouterCarte(getCarteDessus());
+        }
+    }
+
+    public ArrayList<Carte> getCartes() {
         return cartes;
     }
 
-    public void setCartes(Carte[] cartes) {
+    public void setCartes(ArrayList<Carte> cartes) {
         this.cartes = cartes;
     }
 }

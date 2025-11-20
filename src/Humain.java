@@ -7,7 +7,6 @@ public class Humain extends Joueur{
     }
 
     public Offre faireUneOffre(){
-        // TODO
         Scanner scanner = new Scanner(System.in);
         int faceChoisieCachee = 5;
         while( !(faceChoisieCachee == 0  || faceChoisieCachee == 1)){

@@ -9,8 +9,15 @@ public class Offre {
     }
 
     public Carte prendreCarte(boolean faceCachee){
-        //TODO
-        return this.carteFaceCachee;
+        Carte res;
+        if (faceCachee){
+            res =  this.carteFaceCachee;
+            setCarteFaceCachee(null);
+        } else {
+            res =  this.carteFaceAvant;
+            setCarteFaceAvant(null);
+        }
+        return res;
     }
 
 

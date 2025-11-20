@@ -8,7 +8,7 @@ public class Carte {
         Deux,
         Trois,
         Quatre,
-        As;
+        As
     }
 
     private Couleurs couleur;
@@ -17,7 +17,7 @@ public class Carte {
         Carreau,
         Coeur,
         Trefle,
-        Pique;
+        Pique
     }
 
     public Carte(Caractere caractere, Couleurs couleur, boolean estJoker, String codeTrophee) {

@@ -1,4 +1,4 @@
-public class Joueur {
+public abstract class Joueur {
     String nom;
     Integer score;
     Paquet main;
@@ -12,7 +12,7 @@ public class Joueur {
         this.jest = new Paquet();
     }
 
-    public void faireUneOffre(){}
+    public abstract void faireUneOffre();
 
-    public void prendreUneOffre(Joueur joueur, boolean faceCachee){}
+    public abstract void prendreUneOffre(Joueur joueur, boolean faceCachee);
 }

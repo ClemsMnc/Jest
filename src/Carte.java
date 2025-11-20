@@ -1,29 +1,45 @@
 public class Carte {
-    char caractere;
-    char couleur;
     boolean estJoker;
     String codeTrophee;
 
-    public Carte(char caractere, char couleur, boolean estJoker, String codeTrophee) {
+    private Caractere caractere;
+
+    public enum Caractere {
+        Deux,
+        Trois,
+        Quatre,
+        As;
+    }
+
+    private Couleurs couleur;
+
+    public enum Couleurs {
+        Carreau,
+        Coeur,
+        Trefle,
+        Pique;
+    }
+
+    public Carte(Caractere caractere, Couleurs couleur, boolean estJoker, String codeTrophee) {
         this.caractere = caractere;
         this.couleur = couleur;
         this.estJoker = estJoker;
         this.codeTrophee = codeTrophee;
     }
 
-    public char getCaractere() {
+    public Caractere getCaractere() {
         return caractere;
     }
 
-    public void setCaractere(char caractere) {
+    public void setCaractere(Caractere caractere) {
         this.caractere = caractere;
     }
 
-    public char getCouleur() {
+    public Couleurs getCouleur() {
         return couleur;
     }
 
-    public void setCouleur(char couleur) {
+    public void setCouleur(Couleurs couleur) {
         this.couleur = couleur;
     }
 

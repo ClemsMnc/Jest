@@ -12,7 +12,53 @@ public abstract class Joueur {
         this.jest = new Paquet();
     }
 
-    public abstract void faireUneOffre();
+    public abstract Offre faireUneOffre();
 
     public abstract void prendreUneOffre(Joueur joueur, boolean faceCachee);
+
+    public Carte prendreDerniereCarte(){
+        //TODO
+        return null;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public Paquet getJest() {
+        return jest;
+    }
+
+    public Paquet getMain() {
+        return main;
+    }
+
+    public Offre getOffre() {
+        return offre;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public void setMain(Paquet main) {
+        this.main = main;
+    }
+
+    public void setJest(Paquet jest) {
+        this.jest = jest;
+    }
+
+    public void setOffre(Offre offre) {
+        this.offre = offre;
+    }
 }
+

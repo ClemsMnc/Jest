@@ -7,13 +7,20 @@ public class Ordinateur extends Joueur{
     }
 
 
-    public void faireUneOffre(){
-        System.out.println("h");
+    public Offre faireUneOffre(){
+        // TODO
+        return null;
+
     }
 
     public void prendreUneOffre(Joueur joueur, boolean faceCachee){
     }
 
+    public Strategie getStrategie() {
+        return strategie;
+    }
 
-
+    public void setStrategie(Strategie strategie) {
+        this.strategie = strategie;
+    }
 }

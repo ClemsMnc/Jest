@@ -20,7 +20,6 @@ public class Offre {
         return res;
     }
 
-
     public Carte getCarteFaceAvant() {
         return carteFaceAvant;
     }

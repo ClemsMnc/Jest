@@ -4,12 +4,24 @@ public class Strategie1 implements Strategie {
     public Strategie1() {
     }
 
-    public Offre strategieFaireOffre(){
-        int nombre = (int)(Math.random()*2);
-        int faceChoisieVisible = 1 -nombre;
-        return new Offre(main.cartes.get(nombre), main.cartes.get(faceChoisieVisible));
-    }
+    public class Strategie1 implements Strategie {
 
-    public void strategiePrendreOffre(){
-    }
-}
+        @Override
+        public Offre strategieFaireOffre(Joueur joueur) {
+            // on récupère la main du joueur
+            Paquet main = joueur.getMain();
+
+            int nombre = (int)(Math.random() * 2);
+            int faceChoisieVisible = 1 - nombre;
+
+            return new Offre(
+                    main.getCartes().get(nombre),
+                    main.getCartes().get(faceChoisieVisible)
+            );
+        }
+
+        @Override
+        public void strategiePrendreOffre(Joueur joueur) {
+            //TODO
+        }
+    }}

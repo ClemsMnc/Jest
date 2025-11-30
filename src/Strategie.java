@@ -1,5 +1,5 @@
 public interface Strategie {
-    public Offre strategieFaireOffre();
-    public void strategiePrendreOffre();
+    public Offre strategieFaireOffre(Joueur joueur);
+    public void strategiePrendreOffre(Joueur joueur);
 
 }

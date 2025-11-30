@@ -11,7 +11,7 @@ public class Ordinateur extends Joueur{
 
 
     public Offre faireUneOffre(){
-        return this.strategie.strategieFaireOffre();
+        return this.strategie.strategieFaireOffre(this);
     }
     public void prendreUneOffre(Joueur joueur, boolean faceCachee){
     }

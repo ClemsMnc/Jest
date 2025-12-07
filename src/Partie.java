@@ -43,6 +43,38 @@ public class Partie {
         return new Paquet(cartes);
     }
 
+    public ArrayList<Carte> getTrophees() {
+        return trophees;
+    }
+
+    public ArrayList<Joueur> getJoueurs() {
+        return joueurs;
+    }
+
+    public ArrayList<Carte> getCartes() {
+        return cartes;
+    }
+
+    public ArrayList<Carte> getPaquetManche() {
+        return paquetManche;
+    }
+
+    public void setTrophees(ArrayList<Carte> trophees) {
+        this.trophees = trophees;
+    }
+
+    public void setJoueurs(ArrayList<Joueur> joueurs) {
+        this.joueurs = joueurs;
+    }
+
+    public void setCartes(ArrayList<Carte> cartes) {
+        this.cartes = cartes;
+    }
+
+    public void setPaquetManche(ArrayList<Carte> paquetManche) {
+        this.paquetManche = paquetManche;
+    }
+
     public void configurerPartie() {
 
     }
@@ -82,7 +114,6 @@ public class Partie {
 
     }
 
-    public boolean encoreDesOffresDispo(){
-        return true;
+    public boolean encoreDesOffresDispo(){return true;
     }
 }

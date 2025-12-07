@@ -16,6 +16,7 @@ public class Paquet {
     }
 
     public void ajouterCarte(Carte carte) {
+
         this.cartes.add(carte);
     }
 
@@ -24,6 +25,7 @@ public class Paquet {
     }
 
     public Carte getCarteDessus() {
+
         return this.cartes.removeLast();
     }
 

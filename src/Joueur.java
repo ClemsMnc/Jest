@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public abstract class Joueur {
     String nom;
     Integer score;
@@ -14,11 +16,11 @@ public abstract class Joueur {
 
     public abstract Offre faireUneOffre();
 
-    public abstract void prendreUneOffre(Joueur joueur, boolean faceCachee);
+    public abstract void prendreUneOffre(Joueur joueur, boolean faceCachee, ArrayList<Joueur> joueurs);
 
     public Carte prendreDerniereCarte(){
-        //TODO
-        return null;
+        if (main.getCartes().isEmpty()) return null;
+        return main.getCartes().removeLast();
     }
 
     public Integer getScore() {

@@ -128,19 +128,19 @@ public class Partie {
     }
 
     public void configurerCartes(){
-        Paquet paquetbase = creerPaquetBase();
+        cartes = creerPaquetBase();
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Voulez-vous ajouter des cartes spéciales à la partie ? (o/N)");
         String reponse = scanner.nextLine().trim().toUpperCase();
 
         while (reponse.equals("O")){
-            paquetbase.ajouterCarte(creerCarteExtension());
+            cartes.ajouterCarte(creerCarteExtension());
 
             System.out.println("Voulez-vous ajouter une carte spéciale supplémentaire? (o/N)");
             reponse = scanner.nextLine().trim().toUpperCase();
             while (reponse.equals("O")){
-                paquetbase.ajouterCarte(creerCarteExtension());
+                cartes.ajouterCarte(creerCarteExtension());
 
                 System.out.println("Voulez-vous ajouter une carte spéciale supplémentaire? (o/N)");
                 reponse = scanner.nextLine().trim().toUpperCase();
@@ -197,35 +197,43 @@ public class Partie {
             reponseCouleur = scanner.nextLine().trim().toUpperCase();
         }
 
-        return new Carte(caractere,couleur,false,reponseTrophee); // TODO
+        return new Carte(caractere,couleur,false,reponseTrophee);
     }
 
     public void jouerPartie() {
         while(!estTerminee()){
             constituerPaquetManche();
+            distribuerCartes();
             faireOffres();
             selectionnerOffres(determinerPremierJoueur());
 
         }
     }
 
+    public void distribuerCartes() {
+        for (Joueur joueur : this.joueurs) {
+            this.cartes.distribuer(joueur, 2);
+        }
+    }
+
     public void sauvegarderPartie(String nomFichier) {
+        // TODO
     }
 
     public void chargerPartie(String cheminAccesFichier){
-
+        // TODO
     }
 
     public void accept(){
-
+        // TODO
     }
 
     public boolean estTerminee(){
-        return false;
+        return this.cartes.getCartes().size() < this.joueurs.size();
     }
 
     public void distribuerTrophees(){
-
+        // TODO
     }
 
     public Joueur determinerPremierJoueur(){
@@ -249,11 +257,13 @@ public class Partie {
     }
 
     public void selectionnerOffres(Joueur joueur){
-
+        // TODO
     }
 
     public void faireOffres(){
-
+        for (Joueur joueur : this.joueurs) {
+            joueur.faireUneOffre();
+        }
     }
 
     public boolean encoreDesOffresDispo(){

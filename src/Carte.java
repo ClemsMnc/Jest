@@ -58,4 +58,16 @@ public class Carte {
     public void setCodeTrophee(String codeTrophee) {
         this.codeTrophee = codeTrophee;
     }
+
+    public int getValeurCarte(){
+        if (this.estJoker) {
+            return 6;
+        }
+        return switch (this.caractere) {
+            case Deux -> 2;
+            case Trois -> 3;
+            case Quatre -> 4;
+            case As -> 5;
+        };
+    }
 }

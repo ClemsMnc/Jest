@@ -1,10 +1,11 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Partie {
     ArrayList<Carte> trophees = new ArrayList<>();
     ArrayList<Joueur> joueurs = new ArrayList<>();
-    ArrayList<Carte> cartes = new ArrayList<>();
-    ArrayList<Carte> paquetManche = new ArrayList<>();
+    Paquet cartes = new Paquet();
+    Paquet paquetManche = new Paquet();
 
     public static void main(String[] args) {
 
@@ -26,12 +27,12 @@ public class Partie {
         cartes.add(new Carte(Carte.Caractere.Deux, Carte.Couleurs.Carreau,false,"HC"));
         cartes.add(new Carte(Carte.Caractere.Deux, Carte.Couleurs.Coeur,false,"J"));
         cartes.add(new Carte(Carte.Caractere.Deux, Carte.Couleurs.Pique,false,"NB3"));
-        cartes.add(new Carte(Carte.Caractere.Deux, Carte.Couleurs.Trefle,false,"LC"));
+        cartes.add(new Carte(Carte.Caractere.Deux, Carte.Couleurs.Trefle,false,"LCO"));
 
-        cartes.add(new Carte(Carte.Caractere.Trois, Carte.Couleurs.Carreau,false,"LC"));
+        cartes.add(new Carte(Carte.Caractere.Trois, Carte.Couleurs.Carreau,false,"LCA"));
         cartes.add(new Carte(Carte.Caractere.Trois, Carte.Couleurs.Coeur,false,"J"));
         cartes.add(new Carte(Carte.Caractere.Trois, Carte.Couleurs.Pique,false,"NB2"));
-        cartes.add(new Carte(Carte.Caractere.Trois, Carte.Couleurs.Trefle,false,"HC"));
+        cartes.add(new Carte(Carte.Caractere.Trois, Carte.Couleurs.Trefle,false,"HCO"));
 
         cartes.add(new Carte(Carte.Caractere.Quatre, Carte.Couleurs.Carreau,false,"BJNJ"));
         cartes.add(new Carte(Carte.Caractere.Quatre, Carte.Couleurs.Coeur,false,"J"));
@@ -44,11 +45,136 @@ public class Partie {
     }
 
     public void configurerPartie() {
+        configurerJoueurs();
+        configurerCartes();
+    }
 
+    public void configurerJoueurs(){
+        Scanner s = new Scanner(System.in);
+        System.out.println("Veuillez choisir un nombre de joueurs :");
+        int nbJoueurs = s.nextInt();
+        s.nextLine(); // je "mange" le retour à la ligne
+
+        for(int i = 0; i < nbJoueurs; i++) {
+
+            System.out.println("Veuillez entrer le nom du joueur " + (i + 1) + " :");
+            String nomJoueur = s.nextLine();
+
+            boolean saisieValide = false;
+
+            while (!saisieValide) {
+                System.out.println("Le joueur " + (i + 1) + " (" + nomJoueur + ") est-il un humain ou un ordinateur ? (H/O)");
+                String input = s.nextLine().trim().toUpperCase();
+
+                if (input.equals("H")) {
+                    this.joueurs.add(new Humain(nomJoueur));
+                    saisieValide = true;
+
+                } else if (input.equals("O")) {
+                    Ordinateur ordinateur = new Ordinateur(nomJoueur);
+
+                    System.out.println("Choisissez la stratégie de l'ordinateur " + (i + 1) + " (" + nomJoueur + ") :");
+                    System.out.println("1 - Stratégie Aléatoire");
+                    System.out.println("2 - Stratégie Intelligente");
+                    int strategieChoisie = s.nextInt();
+                    s.nextLine();
+
+                    if (strategieChoisie == 1) {
+                        ordinateur.setStrategie(new Strategie1());
+                    } else if (strategieChoisie == 2) {
+                        ordinateur.setStrategie(new Strategie2());
+                    }
+                    this.joueurs.add(ordinateur);
+
+                    saisieValide = true;
+
+                } else {
+                    System.out.println("Saisie incorrecte ! Veuillez entrer H pour humain ou O pour ordinateur.");
+                }
+            }
+        }
+    }
+
+    public void configurerCartes(){
+        Paquet paquetbase = creerPaquetBase();
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Voulez-vous ajouter des cartes spéciales à la partie ? (o/N)");
+        String reponse = scanner.nextLine().trim().toUpperCase();
+
+        while (reponse.equals("O")){
+            paquetbase.ajouterCarte(creerCarteExtension());
+
+            System.out.println("Voulez-vous ajouter une carte spéciale supplémentaire? (o/N)");
+            reponse = scanner.nextLine().trim().toUpperCase();
+            while (reponse.equals("O")){
+                paquetbase.ajouterCarte(creerCarteExtension());
+
+                System.out.println("Voulez-vous ajouter une carte spéciale supplémentaire? (o/N)");
+                reponse = scanner.nextLine().trim().toUpperCase();
+            }
+        }
+    }
+
+    public Carte creerCarteExtension(){
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Choisissez le chiffre de la carte à créer (2, 3, 4, As ou appuyez seulement sur entrée pour un joker) :");
+        String reponseCaractere = scanner.nextLine().trim().toUpperCase();
+
+        Carte.Caractere caractere = null;
+
+        if (reponseCaractere.equals("2")) {
+            caractere = Carte.Caractere.Deux;
+        } else if (reponseCaractere.equals("3")) {
+            caractere = Carte.Caractere.Trois;
+        } else if (reponseCaractere.equals("4")) {
+            caractere = Carte.Caractere.Quatre;
+        } else if (reponseCaractere.equals("AS")) {
+            caractere = Carte.Caractere.As;
+        } else {
+            System.out.println("Sélectionnez un code trophée pour le joker (ex : BJ) :");
+            String codeTrophee = scanner.nextLine().trim().toUpperCase();
+            return new Carte(caractere, null, true, codeTrophee);
+        }
+
+        System.out.println("Choisissez la couleur de la carte à créer (Carreau (ca), Coeur (co), Trefle (t), Pique (p)) :");
+        String reponseCouleur = scanner.nextLine().trim().toUpperCase();
+        while(!reponseCouleur.equals("CA") && !reponseCouleur.equals("CO") && !reponseCouleur.equals("T") && !reponseCouleur.equals("P")){
+            System.out.println("Choix invalide. Choisissez la couleur de la carte à créer (Carreau (ca), Coeur (co), Trefle (t), Pique (p)) :");
+            reponseCouleur = scanner.nextLine().trim().toUpperCase();
+        }
+
+        Carte.Couleurs couleur = null;
+
+        if (reponseCouleur.equals("CA")) {
+            couleur = Carte.Couleurs.Carreau;
+        } else if (reponseCouleur.equals("CO")) {
+            couleur = Carte.Couleurs.Coeur;
+        } else if (reponseCouleur.equals("T")) {
+            couleur = Carte.Couleurs.Trefle;
+        } else {
+            couleur = Carte.Couleurs.Pique;
+        }
+
+        String[] codesTropheesExistants = {"M2","M3","M4", "J", "HT", "HP", "HCA", "HCO", "NB2", "NB3", "NB4", "NBA", "LCA", "LCO", "LT", "LP", "NB2", "BJNJ", "BJ"};
+        System.out.println("Choisissez le code trophée de la nouvelle carte :");
+        String reponseTrophee = scanner.nextLine().trim().toUpperCase();
+        while(!java.util.Arrays.asList(codesTropheesExistants).contains(reponseTrophee)){
+            System.out.println("Choix invalide. Choisissez la couleur de la carte à créer (Carreau (ca), Coeur (co), Trefle (t), Pique (p)) :");
+            reponseCouleur = scanner.nextLine().trim().toUpperCase();
+        }
+
+        return new Carte(caractere,couleur,false,reponseTrophee); // TODO
     }
 
     public void jouerPartie() {
+        while(!estTerminee()){
+            constituerPaquetManche();
+            faireOffres();
+            selectionnerOffres(determinerPremierJoueur());
 
+        }
     }
 
     public void sauvegarderPartie(String nomFichier) {
@@ -70,19 +196,40 @@ public class Partie {
 
     }
 
-    public void determinerPremierJoueur(){
-
+    public Joueur determinerPremierJoueur(){
+        return null; // TODO
     }
 
     public void constituerPaquetManche(){
+        if (this.paquetManche.getCartes().isEmpty()){
+            this.cartes.melanger();
+            for (Joueur joueur : this.joueurs) {
+                // a refaire au propre
+                this.paquetManche.ajouterCarte(this.cartes.getCarteDessus());
+                this.paquetManche.ajouterCarte(this.cartes.getCarteDessus());
+            }
+        } else {
+            this.paquetManche.melanger();
+            for (int i = 0; i < this.joueurs.size(); i++) {
+                this.paquetManche.ajouterCarte(this.cartes.getCarteDessus());
+            }
+        }
+    }
+
+    public void selectionnerOffres(Joueur joueur){
 
     }
 
-    public void selectionnerOffres(){
+    public void faireOffres(){
 
     }
 
     public boolean encoreDesOffresDispo(){
-        return true;
+        for (Joueur joueur : this.joueurs) {
+            if (!joueur.offre.isStatutOffre()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -44,6 +44,38 @@ public class Partie {
         return new Paquet(cartes);
     }
 
+    public ArrayList<Carte> getTrophees() {
+        return trophees;
+    }
+
+    public ArrayList<Joueur> getJoueurs() {
+        return joueurs;
+    }
+
+    public Paquet getCartes() {
+        return cartes;
+    }
+
+    public Paquet getPaquetManche() {
+        return paquetManche;
+    }
+
+    public void setTrophees(ArrayList<Carte> trophees) {
+        this.trophees = trophees;
+    }
+
+    public void setJoueurs(ArrayList<Joueur> joueurs) {
+        this.joueurs = joueurs;
+    }
+
+    public void setCartes(Paquet cartes) {
+        this.cartes = cartes;
+    }
+
+    public void setPaquetManche(Paquet paquetManche) {
+        this.paquetManche = paquetManche;
+    }
+
     public void configurerPartie() {
         configurerJoueurs();
         configurerCartes();

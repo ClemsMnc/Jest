@@ -36,7 +36,7 @@ public class Offre {
         this.carteFaceCachee = carteFaceCachee;
     }
 
-    public boolean isStatutOffre() {
+    public boolean getStatutOffre() {
         return statutOffre;
     }
 

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Humain extends Joueur{
@@ -17,6 +18,12 @@ public class Humain extends Joueur{
         return new Offre(main.cartes.get(faceChoisieCachee), main.cartes.get(faceChoisieVisible));
     }
 
-    public void prendreUneOffre(Joueur joueur, boolean faceCachee){
+    public void prendreUneOffre(Joueur joueur, boolean faceCachee, ArrayList<Joueur> joueurs){
+
+        Carte prise = joueur.getOffre().prendreCarte(faceCachee);
+        if (prise != null) {
+            this.jest.ajouterCarte(prise);
+        }
+        offre.setStatutOffre(false);
     }
 }

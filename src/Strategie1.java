@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Strategie1 implements Strategie {
 
-    public Strategie1() {
+    public Strategie1() {}
 
     @Override
     public Offre strategieFaireOffre(Joueur joueur) {

@@ -258,7 +258,7 @@ public class Partie {
 
     public boolean encoreDesOffresDispo(){
         for (Joueur joueur : this.joueurs) {
-            if (!joueur.offre.isStatutOffre()) {
+            if (!joueur.offre.getStatutOffre()) {
                 return true;
             }
         }

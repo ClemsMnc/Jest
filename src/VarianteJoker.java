@@ -3,9 +3,9 @@ public class VarianteJoker implements VarianteVisitor {
     private VarianteNormale base = new VarianteNormale();
 
     @Override
-    public int calculerScore(Paquet jest) {
+    public int visit(Paquet jest) {
 
-        int score = base.calculerScore(jest);
+        int score = base.visit(jest);
 
         boolean hasJoker = false;
         int nbCoeurs = 0;

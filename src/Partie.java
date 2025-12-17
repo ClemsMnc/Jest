@@ -207,6 +207,9 @@ public class Partie {
             faireOffres();
             selectionnerOffres();
         }
+        distribuerTrophees();
+        accept();
+        afficherFinJeu();
     }
 
     public void distribuerCartes() {
@@ -233,6 +236,15 @@ public class Partie {
 
     public void distribuerTrophees(){
         // TODO
+    }
+
+    public void afficherFinJeu(){
+        System.out.println("La partie est terminée !");
+        System.out.println("Scores finaux :");
+        for (Joueur joueur : this.joueurs) {
+            System.out.println(joueur.getNom() + " : " + joueur.getScore() + " points");
+        }
+        System.out.println("Le gagnant est :");
     }
 
     public Joueur determinerPremierJoueur(){

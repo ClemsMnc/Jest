@@ -4,7 +4,7 @@ import java.util.Map;
 public class VarianteNormale implements VarianteVisitor {
 
     @Override
-    public int calculerScore(Paquet jest) {
+    public int visit(Paquet jest) {
 
         int score = 0;
 

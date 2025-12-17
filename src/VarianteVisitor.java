@@ -3,5 +3,5 @@ public interface VarianteVisitor {
     /**
      * Calcule et retourne le score d’un Jest.
      */
-    int calculerScore(Paquet jest);
+    int visit(Paquet jest);
 }

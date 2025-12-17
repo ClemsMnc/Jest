@@ -6,6 +6,7 @@ public class Partie {
     ArrayList<Joueur> joueurs = new ArrayList<>();
     Paquet cartes = new Paquet();
     Paquet paquetManche = new Paquet();
+    VarianteVisitor variante = null;
 
     public static void main(String[] args) {
 
@@ -79,6 +80,36 @@ public class Partie {
     public void configurerPartie() {
         configurerJoueurs();
         configurerCartes();
+        configurerVariante();
+    }
+
+    public void configurerVariante() {
+        Scanner s = new Scanner(System.in);
+        System.out.println("Veuillez choisir une variante de jeu :");
+        System.out.println("1 - Variante Normale");
+        System.out.println("2 - Variante Couleur");
+        System.out.println("3 - Variante Joker");
+        int choixVariante = s.nextInt();
+        s.nextLine(); // je "mange" le retour à la ligne comme d'habitude
+        while (choixVariante < 1 || choixVariante > 3) {
+            System.out.println("Choix invalide. Veuillez choisir une variante de jeu :");
+            System.out.println("1 - Variante Normale");
+            System.out.println("2 - Variante Couleur");
+            System.out.println("3 - Variante Joker");
+            choixVariante = s.nextInt();
+            s.nextLine();
+        }
+        switch (choixVariante) {
+            case 1:
+                this.variante = new VarianteNormale();
+                break;
+            case 2:
+                this.variante = new VarianteCouleur();
+                break;
+            case 3:
+                this.variante = new VarianteJoker();
+                break;
+        }
     }
 
     public void configurerJoueurs(){
@@ -208,7 +239,7 @@ public class Partie {
             selectionnerOffres();
         }
         distribuerTrophees();
-        accept();
+        accept(this.variante);
         afficherFinJeu();
     }
 

@@ -226,9 +226,15 @@ public class Partie {
         // TODO
     }
 
-    public void accept(){
-        // TODO
+    public void accept(VarianteVisitor visitor) {
+
+        // Pour chaque joueur, on calcule le score à partir de son Jest
+        for (Joueur joueur : joueurs) {
+            int score = visitor.visit(joueur.getJest());
+            joueur.setScore(score);
+        }
     }
+
 
     public boolean estTerminee(){
         return this.cartes.getCartes().size() < this.joueurs.size();

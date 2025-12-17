@@ -14,10 +14,10 @@ public class Carte {
     private Couleurs couleur;
 
     public enum Couleurs {
-        Carreau,
-        Coeur,
+        Pique,
         Trefle,
-        Pique
+        Carreau,
+        Coeur
     }
 
     public Carte(Caractere caractere, Couleurs couleur, boolean estJoker, String codeTrophee) {

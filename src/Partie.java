@@ -237,7 +237,26 @@ public class Partie {
     }
 
     public Joueur determinerPremierJoueur(){
-        return null; // TODO
+        Carte meilleureCarte = this.joueurs.getFirst().offre.getCarteFaceAvant();
+        Joueur premierJoueur = null;
+        Carte.Couleurs couleur = null;
+
+        for (Joueur joueur : this.joueurs) {
+            Carte faceVisible = joueur.offre.getCarteFaceAvant();
+            if (faceVisible.getValeurCarte() > meilleureCarte.getValeurCarte()) {
+                meilleureCarte = faceVisible;
+                premierJoueur = joueur;
+            }
+            // Gestion des égalités de valeur, on classe grâce à la couleur
+            else if (faceVisible.getValeurCarte() == meilleureCarte.getValeurCarte()) {
+                if (faceVisible.getCouleur().ordinal() > meilleureCarte.getCouleur().ordinal()) {
+                    meilleureCarte = faceVisible;
+                    premierJoueur = joueur;
+                }
+            }
+        }
+
+        return premierJoueur;
     }
 
     public void constituerPaquetManche(){

@@ -1,4 +1,4 @@
-public class Variante1 implements VarianteVisitor{
+public class VarianteJoker {
     public void visit(Partie partie) {
         // TODO
     }

@@ -1,0 +1,85 @@
+<html>
+<head>
+<title>Joueur.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+.s4 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Joueur.java</font>
+</center></td></tr></table>
+<pre><span class="s0">public abstract class </span><span class="s1">Joueur </span><span class="s2">{</span>
+    <span class="s1">String nom</span><span class="s2">;</span>
+    <span class="s1">Integer score</span><span class="s2">;</span>
+    <span class="s1">Paquet main</span><span class="s2">;</span>
+    <span class="s1">Paquet jest</span><span class="s2">;</span>
+    <span class="s1">Offre offre</span><span class="s2">;</span>
+
+    <span class="s0">public </span><span class="s1">Joueur</span><span class="s2">(</span><span class="s1">String nom</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">nom </span><span class="s2">= </span><span class="s1">nom</span><span class="s2">;</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">score </span><span class="s2">= </span><span class="s3">0</span><span class="s2">;</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">main </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Paquet</span><span class="s2">();</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">jest </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Paquet</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public abstract </span><span class="s1">Offre faireUneOffre</span><span class="s2">();</span>
+
+    <span class="s0">public abstract void </span><span class="s1">prendreUneOffre</span><span class="s2">(</span><span class="s1">Joueur joueur</span><span class="s2">, </span><span class="s0">boolean </span><span class="s1">faceCachee</span><span class="s2">);</span>
+
+    <span class="s0">public </span><span class="s1">Carte prendreDerniereCarte</span><span class="s2">(){</span>
+        <span class="s4">//TODO</span>
+        <span class="s0">return null</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">Integer getScore</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">score</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">String getNom</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">nom</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">Paquet getJest</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">jest</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">Paquet getMain</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">main</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">Offre getOffre</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">offre</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setNom</span><span class="s2">(</span><span class="s1">String nom</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">nom </span><span class="s2">= </span><span class="s1">nom</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setScore</span><span class="s2">(</span><span class="s1">Integer score</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">score </span><span class="s2">= </span><span class="s1">score</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setMain</span><span class="s2">(</span><span class="s1">Paquet main</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">main </span><span class="s2">= </span><span class="s1">main</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setJest</span><span class="s2">(</span><span class="s1">Paquet jest</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">jest </span><span class="s2">= </span><span class="s1">jest</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setOffre</span><span class="s2">(</span><span class="s1">Offre offre</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">offre </span><span class="s2">= </span><span class="s1">offre</span><span class="s2">;</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+</pre>
+</body>
+</html>

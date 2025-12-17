@@ -1,0 +1,63 @@
+<html>
+<head>
+<title>Paquet.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Paquet.java</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">ArrayList</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">Paquet </span><span class="s2">{</span>
+    <span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Carte</span><span class="s2">&gt; </span><span class="s1">cartes</span><span class="s2">;</span>
+
+    <span class="s0">public </span><span class="s1">Paquet</span><span class="s2">() {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">cartes </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Carte</span><span class="s2">&gt;();</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">Paquet</span><span class="s2">(</span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Carte</span><span class="s2">&gt; </span><span class="s1">cartes</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">cartes </span><span class="s2">= </span><span class="s1">cartes</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">melanger</span><span class="s2">() {</span>
+        <span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Collections</span><span class="s2">.</span><span class="s1">shuffle</span><span class="s2">(</span><span class="s0">this</span><span class="s2">.</span><span class="s1">cartes</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">ajouterCarte</span><span class="s2">(</span><span class="s1">Carte carte</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">cartes</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">carte</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">retirerCarte</span><span class="s2">(</span><span class="s1">Carte carte</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">cartes</span><span class="s2">.</span><span class="s1">remove</span><span class="s2">(</span><span class="s1">carte</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">Carte getCarteDessus</span><span class="s2">() {</span>
+        <span class="s0">return this</span><span class="s2">.</span><span class="s1">cartes</span><span class="s2">.</span><span class="s1">removeLast</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">distribuer</span><span class="s2">(</span><span class="s1">Joueur joueur</span><span class="s2">, </span><span class="s0">int </span><span class="s1">nbCartes</span><span class="s2">){</span>
+        <span class="s0">for </span><span class="s2">(</span><span class="s0">int </span><span class="s1">i </span><span class="s2">= </span><span class="s3">0</span><span class="s2">; </span><span class="s1">i </span><span class="s2">&lt; </span><span class="s1">nbCartes</span><span class="s2">; </span><span class="s1">i</span><span class="s2">++) {</span>
+            <span class="s1">joueur</span><span class="s2">.</span><span class="s1">main</span><span class="s2">.</span><span class="s1">ajouterCarte</span><span class="s2">(</span><span class="s1">getCarteDessus</span><span class="s2">());</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Carte</span><span class="s2">&gt; </span><span class="s1">getCartes</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">cartes</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setCartes</span><span class="s2">(</span><span class="s1">ArrayList</span><span class="s2">&lt;</span><span class="s1">Carte</span><span class="s2">&gt; </span><span class="s1">cartes</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">cartes </span><span class="s2">= </span><span class="s1">cartes</span><span class="s2">;</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

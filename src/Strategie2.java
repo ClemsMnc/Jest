@@ -28,15 +28,13 @@ public class Strategie2 implements Strategie {
 
 
     @Override
-    public void strategiePrendreOffre(Joueur joueur, ArrayList<Joueur> joueurs) {
+    public void strategiePrendreOffre(ArrayList<Joueur> joueurs) {
 
         Joueur meilleureCible = null;
         boolean prendreCachee = false;
         double meilleurScore = -9999;
 
         for (Joueur j : joueurs) {
-
-            if (j == joueur) continue;
 
             Offre offre = j.getOffre();
             if (offre == null || !offre.getStatutOffre()) continue;
@@ -46,7 +44,7 @@ public class Strategie2 implements Strategie {
 
 
             if (visible != null) {
-                double s = scoreCarte(visible, joueur);
+                double s = scoreCarte(visible, j);
                 if (s > meilleurScore) {
                     meilleurScore = s;
                     meilleureCible = j;
@@ -55,7 +53,7 @@ public class Strategie2 implements Strategie {
             }
 
             if (cachee != null) {
-                double s = scoreCarte(cachee, joueur) * 0.7;
+                double s = scoreCarte(cachee, j) * 0.7;
                 if (s > meilleurScore) {
                     meilleurScore = s;
                     meilleureCible = j;
@@ -72,7 +70,7 @@ public class Strategie2 implements Strategie {
         offreChoisie.setStatutOffre(false);
 
         if (prise != null) {
-            joueur.getJest().ajouterCarte(prise);
+            meilleureCible.getJest().ajouterCarte(prise);
         }
     }
 

@@ -67,7 +67,7 @@ public class Carte {
             case Deux -> 2;
             case Trois -> 3;
             case Quatre -> 4;
-            case As -> 5;
+            case As -> 1; // l'as vaut 1 pour la sélection du premier joueur
         };
     }
 }

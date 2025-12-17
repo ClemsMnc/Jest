@@ -205,8 +205,7 @@ public class Partie {
             constituerPaquetManche();
             distribuerCartes();
             faireOffres();
-            selectionnerOffres(determinerPremierJoueur());
-
+            selectionnerOffres();
         }
     }
 
@@ -275,8 +274,45 @@ public class Partie {
         }
     }
 
-    public void selectionnerOffres(Joueur joueur){
-        // TODO
+    public void selectionnerOffres() {
+        Scanner s = new Scanner(System.in);
+        Joueur joueurSuivant = determinerPremierJoueur();
+        int indexJoueur = this.joueurs.indexOf(joueurSuivant);
+        ArrayList<Joueur> joueursRestants = new ArrayList<>(this.joueurs);
+        joueursRestants.remove(indexJoueur);
+
+        while (encoreDesOffresDispo()) {
+            afficherOffresDisponibles();
+            System.out.println(joueurSuivant.getNom() + ", choisissez une offre à prendre (entrez le numéro correspondant) :");
+            int offreSelectionnee = s.nextInt();
+            s.nextLine();
+            while (offreSelectionnee < 0 || offreSelectionnee > joueurs.size()) {
+                System.out.println("Sélection invalide. Veuillez sélectionner une offre disponible.");
+                offreSelectionnee = s.nextInt();
+                s.nextLine();
+            }
+            Joueur cible = joueursRestants.get(offreSelectionnee);
+            System.out.println("Voulez-vous prendre la carte face visible (V) ou face cachée (C) ?");
+            String choixCarte = s.next().trim().toUpperCase();
+            while (!(choixCarte.equals("V") || choixCarte.equals("C"))) {
+                System.out.println("Choix invalide. Voulez-vous prendre la carte face visible (V) ou face cachée (C) ?");
+                choixCarte = s.next().trim().toUpperCase();
+            }
+
+            joueurSuivant.prendreUneOffre(cible, choixCarte.equals("C"), this.joueurs);
+            joueurSuivant = cible;
+        }
+    }
+
+    public void afficherOffresDisponibles(){
+        System.out.println("Offres disponibles :");
+        int i = 0;
+        for (Joueur joueur : this.joueurs) {
+            if (joueur.offre.getStatutOffre()) {
+                System.out.println(i + " - " + joueur.getNom() + " : " + joueur.offre);
+                i++;
+            }
+        }
     }
 
     public void faireOffres(){

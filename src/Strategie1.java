@@ -26,22 +26,22 @@ public class Strategie1 implements Strategie {
 
 
     @Override
-    public void strategiePrendreOffre(Joueur joueur, ArrayList<Joueur> joueurs) {
-        ArrayList<Joueur> joueursOffresDispo = new ArrayList<>();
+    public void strategiePrendreOffre(ArrayList<Joueur> joueurs) {
+//        ArrayList<Joueur> joueursOffresDispo = new ArrayList<>();
+//
+//        for (Joueur j : joueurs) {
+//
+//            if (j == joueur) continue;
+//            Offre o = j.getOffre();
+//
+//            if (o != null && o.getStatutOffre()) {
+//                joueursOffresDispo.add(j);
+//            }
+//        }
+//
+//        if (joueursOffresDispo.isEmpty()) return;
 
-        for (Joueur j : joueurs) {
-
-            if (j == joueur) continue;
-            Offre o = j.getOffre();
-
-            if (o != null && o.getStatutOffre()) {
-                joueursOffresDispo.add(j);
-            }
-        }
-
-        if (joueursOffresDispo.isEmpty()) return;
-
-        Joueur cible = joueursOffresDispo.get((int) (Math.random() * joueursOffresDispo.size()));
+        Joueur cible = joueurs.get((int) (Math.random() * joueurs.size()));
         Offre offreCible = cible.getOffre();
 
         boolean prendreCachee = Math.random() < 0.5;

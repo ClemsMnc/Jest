@@ -43,4 +43,8 @@ public class Offre {
     public void setStatutOffre(boolean statutOffre) {
         this.statutOffre = statutOffre;
     }
+
+    public String toString() {
+        return "[carteFaceAvant=" + carteFaceAvant + ", carteFaceCachee = ???]";
+    }
 }

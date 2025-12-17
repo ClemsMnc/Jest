@@ -14,10 +14,10 @@ public class Carte {
     private Couleurs couleur;
 
     public enum Couleurs {
-        Carreau,
-        Coeur,
+        Pique,
         Trefle,
-        Pique
+        Carreau,
+        Coeur
     }
 
     public Carte(Caractere caractere, Couleurs couleur, boolean estJoker, String codeTrophee) {
@@ -57,5 +57,17 @@ public class Carte {
 
     public void setCodeTrophee(String codeTrophee) {
         this.codeTrophee = codeTrophee;
+    }
+
+    public int getValeurCarte(){
+        if (this.estJoker) {
+            return 6;
+        }
+        return switch (this.caractere) {
+            case Deux -> 2;
+            case Trois -> 3;
+            case Quatre -> 4;
+            case As -> 1; // l'as vaut 1 pour la sélection du premier joueur
+        };
     }
 }

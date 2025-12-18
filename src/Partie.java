@@ -138,6 +138,11 @@ public class Partie {
         System.out.println("Veuillez choisir un nombre de joueurs :");
         int nbJoueurs = s.nextInt();
         s.nextLine(); // je "mange" le retour à la ligne
+        while(nbJoueurs < 2 || nbJoueurs > 4) {
+            System.out.println("Nombre de joueurs invalide. Veuillez choisir un nombre de joueurs (entre 2 et 4) :");
+            nbJoueurs = s.nextInt();
+            s.nextLine();
+        }
 
         for(int i = 0; i < nbJoueurs; i++) {
 
@@ -286,7 +291,7 @@ public class Partie {
 
     public void distribuerCartes() {
         for (Joueur joueur : this.joueurs) {
-            this.cartes.distribuer(joueur, 2);
+            this.paquetManche.distribuer(joueur, 2);
         }
     }
 

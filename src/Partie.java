@@ -96,9 +96,18 @@ public class Partie {
     }
 
     public void configurerPartie() {
+        System.out.println("Configuration de la partie");
+        System.out.println("-------------------------");
+        System.out.println("Configuration des joueurs");
         configurerJoueurs();
+        System.out.println("-------------------------");
+        System.out.println("Configuration des cartes");
         configurerCartes();
+        System.out.println("-------------------------");
+        System.out.println("Configuration de la variante");
         configurerVariante();
+        System.out.println("-------------------------");
+        System.out.println("Configuration des trophées");
         configurerTrophees();
     }
 
@@ -546,10 +555,14 @@ public class Partie {
     public void afficherFinJeu(){
         System.out.println("La partie est terminée !");
         System.out.println("Scores finaux :");
+        Joueur gagnant = joueurs.getFirst();
         for (Joueur joueur : this.joueurs) {
+            if (joueur.getScore() > gagnant.getScore()) {
+                gagnant = joueur;
+            }
             System.out.println(joueur.getNom() + " : " + joueur.getScore() + " points");
         }
-        System.out.println("Le gagnant est :");
+        System.out.println("Le gagnant est : " + gagnant.getNom() + " avec " + gagnant.getScore() + " points !");
     }
 
     public Joueur determinerPremierJoueur(){

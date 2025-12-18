@@ -189,7 +189,7 @@ public class Partie {
             couleur = Carte.Couleurs.Pique;
         }
 
-        String[] codesTropheesExistants = {"M2","M3","M4", "J", "HT", "HP", "HCA", "HCO", "NB2", "NB3", "NB4", "NBA", "LCA", "LCO", "LT", "LP", "BJNJ", "BJ"};
+        String[] codesTropheesExistants = {"M2","M3","M4", "MA", "J", "HT", "HP", "HCA", "HCO", "NB2", "NB3", "NB4", "NBA", "LCA", "LCO", "LT", "LP", "BJNJ", "BJ"};
         System.out.println("Choisissez le code trophée de la nouvelle carte :");
         String reponseTrophee = scanner.nextLine().trim().toUpperCase();
         while(!java.util.Arrays.asList(codesTropheesExistants).contains(reponseTrophee)){

@@ -106,6 +106,8 @@ public class Partie {
         this.cartes.melanger();
         this.trophees.add(this.cartes.getCarteDessus());
         this.trophees.add(this.cartes.getCarteDessus());
+        System.out.println("Trophées sélectionnés pour cette partie :");
+        System.out.println(this.trophees);
     }
 
     public void configurerVariante() {

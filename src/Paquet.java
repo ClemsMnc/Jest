@@ -84,4 +84,15 @@ public class Paquet {
     public void setCartes(ArrayList<Carte> cartes) {
         this.cartes = cartes;
     }
+
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Cartes: [");
+        for (Carte carte : cartes) {
+            sb.append(carte.toString()).append(", ");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append("]");
+        return sb.toString();
+    }
 }

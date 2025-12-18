@@ -70,4 +70,12 @@ public class Carte {
             case As -> 1; // l'as vaut 1 pour la sélection du premier joueur
         };
     }
+
+    public String toString() {
+        if (estJoker) {
+            return "Joker";
+        } else {
+            return caractere.toString() + " de " + couleur.toString();
+        }
+    }
 }

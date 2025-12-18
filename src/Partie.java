@@ -636,7 +636,7 @@ public class Partie {
 
     public void faireOffres(){
         for (Joueur joueur : this.joueurs) {
-            joueur.faireUneOffre();
+            joueur.setOffre(joueur.faireUneOffre());
         }
     }
 

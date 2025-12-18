@@ -7,6 +7,9 @@ public class Partie {
     Paquet cartes = new Paquet();
     Paquet paquetManche = new Paquet();
 
+    String[] codesTropheesExistants = {"M2","M3","M4", "MA", "J", "HT", "HP", "HCA", "HCO", "NB2", "NB3", "NB4", "NBA", "LCA", "LCO", "LT", "LP", "BJNJ", "BJ"};
+
+
     public static void main(String[] args) {
 
         Partie partie = new Partie();
@@ -166,8 +169,12 @@ public class Partie {
             caractere = Carte.Caractere.As;
         } else {
             System.out.println("Sélectionnez un code trophée pour le joker (ex : BJ) :");
-            String codeTrophee = scanner.nextLine().trim().toUpperCase();
-            return new Carte(caractere, null, true, codeTrophee);
+            String reponseTrophee = scanner.nextLine().trim().toUpperCase();
+            while(!java.util.Arrays.asList(codesTropheesExistants).contains(reponseTrophee)) {
+                System.out.println("Choix invalide. Choisissez la couleur de la carte à créer (Carreau (ca), Coeur (co), Trefle (t), Pique (p)) :");
+                reponseTrophee = scanner.nextLine().trim().toUpperCase();
+            }
+            return new Carte(caractere, null, true, reponseTrophee);
         }
 
         System.out.println("Choisissez la couleur de la carte à créer (Carreau (ca), Coeur (co), Trefle (t), Pique (p)) :");
@@ -193,8 +200,8 @@ public class Partie {
         System.out.println("Choisissez le code trophée de la nouvelle carte :");
         String reponseTrophee = scanner.nextLine().trim().toUpperCase();
         while(!java.util.Arrays.asList(codesTropheesExistants).contains(reponseTrophee)){
-            System.out.println("Choix invalide. Choisissez la couleur de la carte à créer (Carreau (ca), Coeur (co), Trefle (t), Pique (p)) :");
-            reponseCouleur = scanner.nextLine().trim().toUpperCase();
+            System.out.println("Choix invalide. Choisissez le code trophée de la carte à créer :");
+            reponseTrophee = scanner.nextLine().trim().toUpperCase();
         }
 
         return new Carte(caractere,couleur,false,reponseTrophee);

@@ -266,10 +266,15 @@ public class Partie {
         Scanner sc = new Scanner(System.in);
 
         while (!estTerminee()) {
-
+            System.out.println(paquetManche);
+            recupererCartesDesOffres();
+            System.out.println(paquetManche);
             constituerPaquetManche();
+            System.out.println(paquetManche);
             distribuerCartes();
+            System.out.println(paquetManche);
             faireOffres();
+            System.out.println(paquetManche);
             selectionnerOffres();
 
             System.out.print("Voulez-vous sauvegarder la partie ? (o/N) : ");
@@ -554,7 +559,7 @@ public class Partie {
 
     public Joueur determinerPremierJoueur(){
         Carte meilleureCarte = this.joueurs.getFirst().offre.getCarteFaceAvant();
-        Joueur premierJoueur = null;
+        Joueur premierJoueur = this.joueurs.get(0);
         Carte.Couleurs couleur = null;
 
         for (Joueur joueur : this.joueurs) {
@@ -592,39 +597,85 @@ public class Partie {
     }
 
     public void selectionnerOffres() {
+
         Scanner s = new Scanner(System.in);
+
+
         Joueur joueurSuivant = determinerPremierJoueur();
-        ArrayList<Joueur> joueursRestants = new ArrayList<>(this.joueurs);
-        joueursRestants.remove(joueurSuivant);
+
+        // Sécurité
+        if (joueurSuivant == null) {
+            throw new IllegalStateException("Impossible de déterminer le premier joueur");
+        }
 
         while (encoreDesOffresDispo()) {
-            if (joueurSuivant instanceof Ordinateur) {
-                joueurSuivant.prendreUneOffre(null,false,joueursRestants);
-                joueursRestants = new ArrayList<>(this.joueurs);
-                joueursRestants.remove(joueurSuivant);
-            } else {
-                afficherOffresDisponibles(joueurSuivant);
-                System.out.println(joueurSuivant.getNom() + ", choisissez une offre à prendre (entrez le numéro correspondant) :");
-                int offreSelectionnee = s.nextInt();
-                s.nextLine();
-                while (offreSelectionnee < 0 || offreSelectionnee >= joueursRestants.size()) {
-                    System.out.println("Sélection invalide. Veuillez sélectionner une offre disponible.");
-                    offreSelectionnee = s.nextInt();
-                    s.nextLine();
+
+            ArrayList<Joueur> joueursDispo = new ArrayList<>();
+
+            for (Joueur j : joueurs) {
+                if (j != joueurSuivant && j.getOffre() != null && j.getOffre().getStatutOffre()) {
+                    joueursDispo.add(j);
                 }
-                Joueur cible = joueursRestants.get(offreSelectionnee);
-                System.out.println("Voulez-vous prendre la carte face visible (V) ou face cachée (C) ?");
-                String choixCarte = s.next().trim().toUpperCase();
-                while (!(choixCarte.equals("V") || choixCarte.equals("C"))) {
-                    System.out.println("Choix invalide. Voulez-vous prendre la carte face visible (V) ou face cachée (C) ?");
-                    choixCarte = s.next().trim().toUpperCase();
+            }
+
+            if (joueursDispo.isEmpty()) {
+                break;
+            }
+
+            if (joueurSuivant instanceof Ordinateur) {
+
+                joueurSuivant.prendreUneOffre(null, false, joueursDispo);
+
+                for (Joueur j : joueursDispo) {
+                    if (!j.getOffre().getStatutOffre()) {
+                        joueurSuivant = j;
+                        break;
+                    }
+                }
+            }
+
+            // ======================
+            // CAS HUMAIN
+            // ======================
+            else {
+
+
+                System.out.println("Offres disponibles :");
+                for (int i = 0; i < joueursDispo.size(); i++) {
+                    Joueur j = joueursDispo.get(i);
+                    System.out.println(i + " - " + j.getNom() + " : " + j.getOffre());
                 }
 
-                joueurSuivant.prendreUneOffre(cible, choixCarte.equals("C"), this.joueurs);
+
+                System.out.println(joueurSuivant.getNom()
+                        + ", choisissez une offre à prendre (entrez le numéro correspondant) :");
+
+                int choix = s.nextInt();
+                s.nextLine();
+
+                while (choix < 0 || choix >= joueursDispo.size()) {
+                    System.out.println("Sélection invalide. Veuillez réessayer :");
+                    choix = s.nextInt();
+                    s.nextLine();
+                }
+
+                Joueur cible = joueursDispo.get(choix);
+
+
+                System.out.println("Voulez-vous prendre la carte face visible (V) ou face cachée (C) ?");
+                String choixCarte = s.nextLine().trim().toUpperCase();
+
+                while (!choixCarte.equals("V") && !choixCarte.equals("C")) {
+                    System.out.println("Choix invalide. Entrez V ou C :");
+                    choixCarte = s.nextLine().trim().toUpperCase();
+                }
+
+                joueurSuivant.prendreUneOffre(cible, choixCarte.equals("C"), joueurs);
                 joueurSuivant = cible;
             }
         }
     }
+
 
     public void afficherOffresDisponibles(Joueur joueurSuivant) {
         System.out.println("Offres disponibles :");
@@ -655,4 +706,25 @@ public class Partie {
         }
         return false;
     }
+    public void recupererCartesDesOffres() {
+
+        for (Joueur joueur : joueurs) {
+
+            Offre offre = joueur.getOffre();
+            if (offre == null) continue;
+
+            if (offre.getCarteFaceAvant() != null) {
+                paquetManche.ajouterCarte(offre.getCarteFaceAvant());
+                offre.setCarteFaceAvant(null);
+            }
+
+            if (offre.getCarteFaceCachee() != null) {
+                paquetManche.ajouterCarte(offre.getCarteFaceCachee());
+                offre.setCarteFaceCachee(null);
+            }
+
+            offre.setStatutOffre(false);
+        }
+    }
+
 }

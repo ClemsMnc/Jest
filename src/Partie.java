@@ -12,9 +12,25 @@ public class Partie {
 
     public static void main(String[] args) {
 
+        Scanner sc = new Scanner(System.in);
         Partie partie = new Partie();
 
-        partie.configurerPartie();
+        System.out.println("=== JEST ===");
+        System.out.println("1 - Nouvelle partie");
+        System.out.println("2 - Charger une partie");
+        System.out.print("Votre choix : ");
+
+        int choix = sc.nextInt();
+        sc.nextLine();
+        if (choix == 2) {
+            System.out.print("Nom du fichier de sauvegarde : ");
+            String fichier = sc.nextLine();
+            partie.chargerPartie(fichier);
+            System.out.println("Partie chargée avec succès !");
+        } else {
+            partie.configurerPartie();
+        }
+
         partie.jouerPartie();
     }
 
@@ -208,17 +224,33 @@ public class Partie {
     }
 
     public void jouerPartie() {
-        while(!estTerminee()){
+
+        Scanner sc = new Scanner(System.in);
+
+        while (!estTerminee()) {
+
             constituerPaquetManche();
             distribuerCartes();
             faireOffres();
             selectionnerOffres();
+
+            System.out.print("Voulez-vous sauvegarder la partie ? (o/N) : ");
+            String rep = sc.nextLine().trim().toUpperCase();
+
+            if (rep.equals("O")) {
+                System.out.print("Nom du fichier de sauvegarde : ");
+                String fichier = sc.nextLine();
+                sauvegarderPartie(fichier);
+                System.out.println("Partie sauvegardée !");
+            }
         }
+
         distribuerTrophees();
         VarianteVisitor visitor = new VarianteNormale();
         accept(visitor);
         afficherFinJeu();
     }
+
 
     public void distribuerCartes() {
         for (Joueur joueur : this.joueurs) {

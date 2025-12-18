@@ -1,7 +1,7 @@
 public class Offre {
     private Carte carteFaceAvant;
     private Carte carteFaceCachee;
-    private boolean statutOffre;
+    private boolean statutOffre = true;
 
     public Offre(Carte carteFaceAvant, Carte carteFaceCachee) {
         this.carteFaceAvant = carteFaceAvant;

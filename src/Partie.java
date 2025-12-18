@@ -589,22 +589,20 @@ public class Partie {
     public void selectionnerOffres() {
         Scanner s = new Scanner(System.in);
         Joueur joueurSuivant = determinerPremierJoueur();
-        int indexJoueur = this.joueurs.indexOf(joueurSuivant);
         ArrayList<Joueur> joueursRestants = new ArrayList<>(this.joueurs);
-        joueursRestants.remove(indexJoueur);
+        joueursRestants.remove(joueurSuivant);
 
         while (encoreDesOffresDispo()) {
             if (joueurSuivant instanceof Ordinateur) {
                 joueurSuivant.prendreUneOffre(null,false,joueursRestants);
-                indexJoueur = this.joueurs.indexOf(joueurSuivant);
                 joueursRestants = new ArrayList<>(this.joueurs);
-                joueursRestants.remove(indexJoueur);
+                joueursRestants.remove(joueurSuivant);
             } else {
-                afficherOffresDisponibles();
+                afficherOffresDisponibles(joueurSuivant);
                 System.out.println(joueurSuivant.getNom() + ", choisissez une offre à prendre (entrez le numéro correspondant) :");
                 int offreSelectionnee = s.nextInt();
                 s.nextLine();
-                while (offreSelectionnee < 0 || offreSelectionnee > joueurs.size()) {
+                while (offreSelectionnee < 0 || offreSelectionnee >= joueursRestants.size()) {
                     System.out.println("Sélection invalide. Veuillez sélectionner une offre disponible.");
                     offreSelectionnee = s.nextInt();
                     s.nextLine();
@@ -623,12 +621,16 @@ public class Partie {
         }
     }
 
-    public void afficherOffresDisponibles(){
+    public void afficherOffresDisponibles(Joueur joueurSuivant) {
         System.out.println("Offres disponibles :");
         int i = 0;
         for (Joueur joueur : this.joueurs) {
             if (joueur.offre.getStatutOffre()) {
-                System.out.println(i + " - " + joueur.getNom() + " : " + joueur.offre);
+                if (joueur == joueurSuivant) {
+                    System.out.println(i + " - " + joueur.getNom() + " : Offre non disponible (vous ne pouvez pas prendre votre propre offre)");
+                } else {
+                    System.out.println(i + " - " + joueur.getNom() + " : " + joueur.offre);
+                }
                 i++;
             }
         }

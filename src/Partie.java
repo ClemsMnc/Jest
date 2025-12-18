@@ -616,7 +616,8 @@ public class Partie {
             ArrayList<Joueur> joueursDispo = new ArrayList<>();
 
             for (Joueur j : joueurs) {
-                if ((j != joueurSuivant && j.getOffre() != null && j.getOffre().getStatutOffre())) {
+                if ((j != joueurSuivant && j.getOffre() != null && j.getOffre().getStatutOffre()) || (j == joueurSuivant
+                        && joueursAyantPasJoue.size() == 1)) {
                     joueursDispo.add(j);
                 }
             }

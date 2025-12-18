@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-
+import java.io.*;
 public class Partie {
     ArrayList<Carte> trophees = new ArrayList<>();
     ArrayList<Joueur> joueurs = new ArrayList<>();
@@ -208,7 +208,8 @@ public class Partie {
             selectionnerOffres();
         }
         distribuerTrophees();
-        accept();
+        VarianteVisitor visitor = new VarianteNormale();
+        accept(visitor);
         afficherFinJeu();
     }
 
@@ -218,12 +219,146 @@ public class Partie {
         }
     }
 
-    public void sauvegarderPartie(String nomFichier) {
-        // TODO
+    public void sauvegarderPartie(String fichier) {
+
+        try (PrintWriter out = new PrintWriter(new FileWriter(fichier))) {
+
+            for (Joueur j : joueurs) {
+
+                out.println("JOUEUR");
+                out.println(j instanceof Humain ? "HUMAIN" : "ORDINATEUR");
+                out.println(j.getNom());
+                out.println(j.getScore());
+
+                out.println("MAIN");
+                for (Carte c : j.getMain().getCartes()) {
+                    ecrireCarte(out, c);
+                }
+
+                out.println("JEST");
+                for (Carte c : j.getJest().getCartes()) {
+                    ecrireCarte(out, c);
+                }
+
+                out.println("OFFRE");
+                if (j.getOffre() != null) {
+                    ecrireCarte(out, j.getOffre().getCarteFaceAvant());
+                    ecrireCarte(out, j.getOffre().getCarteFaceCachee());
+                } else {
+                    out.println("null");
+                    out.println("null");
+                }
+            }
+
+            out.println("PIOCHE");
+            for (Carte c : cartes.getCartes()) {
+                ecrireCarte(out, c);
+            }
+
+            out.println("PAQUET_MANCHE");
+            for (Carte c : paquetManche.getCartes()) {
+                ecrireCarte(out, c);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erreur sauvegarde : " + e.getMessage());
+        }
     }
 
-    public void chargerPartie(String cheminAccesFichier){
-        // TODO
+
+    public void chargerPartie(String fichier) {
+
+        try (Scanner sc = new Scanner(new File(fichier))) {
+
+            joueurs.clear();
+            cartes.getCartes().clear();
+            paquetManche.getCartes().clear();
+
+            String ligne;
+
+            while (sc.hasNextLine()) {
+
+                ligne = sc.nextLine();
+
+                if (ligne.equals("JOUEUR")) {
+
+                    String type = sc.nextLine(); // HUMAIN / ORDINATEUR
+                    String nom = sc.nextLine();
+                    int score = Integer.parseInt(sc.nextLine());
+
+                    Joueur j;
+                    if (type.equals("HUMAIN")) {
+                        j = new Humain(nom);
+                    } else {
+                        j = new Ordinateur(nom);
+                    }
+                    j.setScore(score);
+
+                    sc.nextLine(); // MAIN
+                    ligne = sc.nextLine();
+                    while (!ligne.equals("JEST")) {
+                        j.getMain().ajouterCarte(lireCarte(ligne, sc));
+                        ligne = sc.nextLine();
+                    }
+
+                    ligne = sc.nextLine(); // première carte JEST
+                    while (!ligne.equals("OFFRE")) {
+                        j.getJest().ajouterCarte(lireCarte(ligne, sc));
+                        ligne = sc.nextLine();
+                    }
+
+                    Carte visible = lireCarte(sc.nextLine(), sc);
+                    Carte cachee  = lireCarte(sc.nextLine(), sc);
+                    if (visible != null || cachee != null) {
+                        j.setOffre(new Offre(visible, cachee));
+                    }
+
+                    joueurs.add(j);
+                }
+
+                else if (ligne.equals("PIOCHE")) {
+                    ligne = sc.nextLine();
+                    while (!ligne.equals("PAQUET_MANCHE")) {
+                        cartes.ajouterCarte(lireCarte(ligne, sc));
+                        ligne = sc.nextLine();
+                    }
+                }
+
+                else if (ligne.equals("PAQUET_MANCHE")) {
+                    while (sc.hasNextLine()) {
+                        paquetManche.ajouterCarte(lireCarte(sc.nextLine(), sc));
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println("Erreur chargement : " + e.getMessage());
+        }
+    }
+
+
+    private void ecrireCarte(PrintWriter out, Carte c) {
+        if (c == null) {
+            out.println("null");
+        } else {
+            out.println(c.isEstJoker());
+            out.println(c.getCaractere());
+            out.println(c.getCouleur());
+            out.println(c.getCodeTrophee());
+        }
+    }
+
+    private Carte lireCarte(String premiereLigne, Scanner sc) {
+        if (premiereLigne.equals("null")) {
+            return null;
+        }
+
+        boolean estJoker = Boolean.parseBoolean(premiereLigne);
+        Carte.Caractere caractere = Carte.Caractere.valueOf(sc.nextLine());
+        Carte.Couleurs couleur = Carte.Couleurs.valueOf(sc.nextLine());
+        String codeTrophee = sc.nextLine();
+
+        return new Carte(caractere, couleur, estJoker, codeTrophee);
     }
 
     public void accept(VarianteVisitor visitor) {

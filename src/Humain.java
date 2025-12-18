@@ -18,7 +18,9 @@ public class Humain extends Joueur{
             scanner.nextLine();
         }
         int faceChoisieVisible = 1 - faceChoisieCachee;
-        return new Offre(main.cartes.get(faceChoisieCachee), main.cartes.get(faceChoisieVisible));
+        Offre offre =  new Offre(main.cartes.get(faceChoisieVisible), main.cartes.get(faceChoisieCachee));
+        this.main = new Paquet();
+        return offre;
     }
 
     public void prendreUneOffre(Joueur joueur, boolean faceCachee, ArrayList<Joueur> joueurs){

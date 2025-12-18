@@ -266,15 +266,15 @@ public class Partie {
         Scanner sc = new Scanner(System.in);
 
         while (!estTerminee()) {
-            System.out.println(paquetManche);
+
             recupererCartesDesOffres();
-            System.out.println(paquetManche);
+
             constituerPaquetManche();
-            System.out.println(paquetManche);
+
             distribuerCartes();
-            System.out.println(paquetManche);
+
             faireOffres();
-            System.out.println(paquetManche);
+
             selectionnerOffres();
 
             System.out.print("Voulez-vous sauvegarder la partie ? (o/N) : ");

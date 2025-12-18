@@ -457,6 +457,9 @@ public class Partie {
     }
 
     public void distribuerTrophees() {
+        for (Joueur j : this.joueurs) {
+            System.out.println(j.getNom() + " jest : " + j.getJest());
+        }
 
         for (Carte trophee : this.trophees) {
 
@@ -540,6 +543,9 @@ public class Partie {
             if (gagnant != null) {
                 gagnant.getJest().getCartes().add(trophee);
             }
+        }
+        for (Joueur j : this.joueurs) {
+            System.out.println(j.getNom() + " jest : " + j.getJest());
         }
     }
 

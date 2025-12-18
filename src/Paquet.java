@@ -20,6 +20,48 @@ public class Paquet {
         this.cartes.add(carte);
     }
 
+    public int compterCaractere(Carte.Caractere c) {
+        int count = 0;
+        for (Carte carte : cartes) {
+            if (!carte.isEstJoker() && carte.getCaractere() == c) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int compterCouleur(Carte.Couleurs couleur) {
+        int count = 0;
+        for (Carte carte : cartes) {
+            if (carte.getCouleur() == couleur) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public Carte getCarteExtremeCouleur(Carte.Couleurs couleur, boolean highest) {
+        Carte resultat = null;
+
+        for (Carte c : cartes) {
+            if (c.getCouleur() == couleur) {
+                if (resultat == null ||
+                        (highest && c.getValeurCarte() > resultat.getValeurCarte()) ||
+                        (!highest && c.getValeurCarte() < resultat.getValeurCarte())) {
+                    resultat = c;
+                }
+            }
+        }
+        return resultat;
+    }
+
+    public boolean contientJoker() {
+        for (Carte c : cartes) {
+            if (c.isEstJoker()) return true;
+        }
+        return false;
+    }
+
     public void retirerCarte(Carte carte) {
         this.cartes.remove(carte);
     }

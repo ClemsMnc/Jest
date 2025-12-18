@@ -6,7 +6,7 @@ public class Partie {
     ArrayList<Joueur> joueurs = new ArrayList<>();
     Paquet cartes = new Paquet();
     Paquet paquetManche = new Paquet();
-
+    VarianteVisitor variante = null;
     String[] codesTropheesExistants = {"M2","M3","M4", "MA", "J", "HT", "HP", "HCA", "HCO", "NB2", "NB3", "NB4", "NBA", "LCA", "LCO", "LT", "LP", "BJNJ", "BJ"};
 
 
@@ -98,6 +98,37 @@ public class Partie {
     public void configurerPartie() {
         configurerJoueurs();
         configurerCartes();
+        configurerVariante();
+        configurerTrophees();
+    }
+
+    public void configurerTrophees() {
+        this.cartes.melanger();
+        this.trophees.add(this.cartes.getCarteDessus());
+        this.trophees.add(this.cartes.getCarteDessus());
+    }
+
+    public void configurerVariante() {
+        Scanner s = new Scanner(System.in);
+        System.out.println("Veuillez choisir une variante de calcul des scores :");
+        System.out.println("1 - Variante Normale");
+        System.out.println("2 - Variante Joker");
+        System.out.println("3 - Variante Couleur");
+        int choixVariante = s.nextInt();
+        s.nextLine(); // je "mange" le retour à la ligne
+        while (choixVariante < 1 || choixVariante > 3) {
+            System.out.println("Choix invalide. Veuillez choisir une variante de calcul des scores :");
+            System.out.println("1 - Variante Normale");
+            System.out.println("2 - Variante Joker");
+            System.out.println("3 - Variante Couleur");
+            choixVariante = s.nextInt();
+            s.nextLine(); // je "mange" le retour à la ligne
+        }
+        switch (choixVariante) {
+            case 1 -> this.variante = new VarianteNormale();
+            case 2 -> this.variante = new VarianteJoker();
+            case 3 -> this.variante = new VarianteCouleur();
+        }
     }
 
     public void configurerJoueurs(){
@@ -246,8 +277,7 @@ public class Partie {
         }
 
         distribuerTrophees();
-        VarianteVisitor visitor = new VarianteNormale();
-        accept(visitor);
+        accept(variante);
         afficherFinJeu();
     }
 
@@ -414,23 +444,97 @@ public class Partie {
         return this.cartes.getCartes().size() < this.joueurs.size();
     }
 
-    public void distribuerTrophees(){
-        // On vide la liste au cas où
-        this.trophees.clear();
+    public void distribuerTrophees() {
 
-        // Pour chaque joueur
-        for (Joueur joueur : this.joueurs) {
+        for (Carte trophee : this.trophees) {
 
-            // Pour chaque carte de son Jest
-            for (Carte carte : joueur.getJest().getCartes()) {
+            String code = trophee.getCodeTrophee();
+            Joueur gagnant = null;
 
-                // Si la carte a un code trophée valide
-                if (carte.getCodeTrophee() != null && !carte.getCodeTrophee().isEmpty()) {
-                    this.trophees.add(carte);
+            switch (code) {
+
+                /* ================= MAJORITY ================= */
+                case "M2", "M3", "M4", "MA" -> {
+                    Carte.Caractere car = switch (code) {
+                        case "M2" -> Carte.Caractere.Deux;
+                        case "M3" -> Carte.Caractere.Trois;
+                        case "M4" -> Carte.Caractere.Quatre;
+                        default -> Carte.Caractere.As;
+                    };
+
+                    int max = -1;
+                    for (Joueur j : this.joueurs) {
+                        int nb = j.getJest().compterCaractere(car);
+                        if (nb > max) {
+                            max = nb;
+                            gagnant = j;
+                        }
+                    }
                 }
+
+                /* ================= JOKER ================= */
+                case "J" -> {
+                    for (Joueur j : this.joueurs) {
+                        if (j.getJest().contientJoker()) {
+                            gagnant = j;
+                            break;
+                        }
+                    }
+                }
+
+                /* ================= HIGHEST / LOWEST COULEUR ================= */
+                case "HP", "HT", "HCA", "HCO", "LP", "LT", "LCA", "LCO" -> {
+
+                    boolean highest = code.startsWith("H");
+
+                    Carte.Couleurs couleur = switch (code.substring(1)) {
+                        case "P" -> Carte.Couleurs.Pique;
+                        case "T" -> Carte.Couleurs.Trefle;
+                        case "CA" -> Carte.Couleurs.Carreau;
+                        default -> Carte.Couleurs.Coeur;
+                    };
+
+                    int bestValue = highest ? -1 : Integer.MAX_VALUE;
+
+                    for (Joueur j : this.joueurs) {
+                        Carte c = j.getJest().getCarteExtremeCouleur(couleur, highest);
+                        if (c != null) {
+                            int v = c.getValeurCarte();
+                            if ((highest && v > bestValue) || (!highest && v < bestValue)) {
+                                bestValue = v;
+                                gagnant = j;
+                            }
+                        }
+                    }
+                }
+
+                /* ================= BEST JEST ================= */
+                case "BJ", "BJNJ" -> {
+
+                    int best = -1;
+
+                    for (Joueur j : this.joueurs) {
+                        if (code.equals("BJNJ") && j.getJest().contientJoker()) continue;
+
+                        int total = 0;
+                        for (Carte c : j.getJest().getCartes()) {
+                            total += c.getValeurCarte();
+                        }
+
+                        if (total > best) {
+                            best = total;
+                            gagnant = j;
+                        }
+                    }
+                }
+            }
+
+            if (gagnant != null) {
+                gagnant.getJest().getCartes().add(trophee);
             }
         }
     }
+
 
     public void afficherFinJeu(){
         System.out.println("La partie est terminée !");

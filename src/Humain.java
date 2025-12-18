@@ -29,6 +29,7 @@ public class Humain extends Joueur{
         if (prise != null) {
             this.jest.ajouterCarte(prise);
         }
-        offre.setStatutOffre(false);
+        joueur.getOffre().setStatutOffre(false);
+
     }
 }

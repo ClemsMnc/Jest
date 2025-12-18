@@ -83,6 +83,13 @@ public class Partie {
         configurerJoueurs();
         configurerCartes();
         configurerVariante();
+        configurerTrophees();
+    }
+
+    public void configurerTrophees() {
+        this.cartes.melanger();
+        this.trophees.add(this.cartes.getCarteDessus());
+        this.trophees.add(this.cartes.getCarteDessus());
     }
 
     public void configurerVariante() {

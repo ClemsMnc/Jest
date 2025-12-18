@@ -376,7 +376,21 @@ public class Partie {
     }
 
     public void distribuerTrophees(){
-        // TODO
+        // On vide la liste au cas où
+        this.trophees.clear();
+
+        // Pour chaque joueur
+        for (Joueur joueur : this.joueurs) {
+
+            // Pour chaque carte de son Jest
+            for (Carte carte : joueur.getJest().getCartes()) {
+
+                // Si la carte a un code trophée valide
+                if (carte.getCodeTrophee() != null && !carte.getCodeTrophee().isEmpty()) {
+                    this.trophees.add(carte);
+                }
+            }
+        }
     }
 
     public void afficherFinJeu(){

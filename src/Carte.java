@@ -61,7 +61,7 @@ public class Carte {
 
     public int getValeurCarte(){
         if (this.estJoker) {
-            return 6;
+            return 0; // le joker vaut 0 pour le la sélection du premier joueur
         }
         return switch (this.caractere) {
             case Deux -> 2;

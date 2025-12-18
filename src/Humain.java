@@ -17,9 +17,7 @@ public class Humain extends Joueur{
             faceChoisieCachee = scanner.nextInt();
             scanner.nextLine();
         }
-        System.out.println("ccccccc");
         int faceChoisieVisible = 1 - faceChoisieCachee;
-        System.out.println("ffffff");
         return new Offre(main.cartes.get(faceChoisieCachee), main.cartes.get(faceChoisieVisible));
     }
 

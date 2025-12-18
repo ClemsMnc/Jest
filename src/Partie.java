@@ -595,19 +595,25 @@ public class Partie {
 
         Scanner s = new Scanner(System.in);
 
+        ArrayList<Joueur> joueursAyantPasJoue = new ArrayList<>(joueurs);
+
         Joueur joueurSuivant = determinerPremierJoueur();
 
-        // Sécurité
         if (joueurSuivant == null) {
             throw new IllegalStateException("Impossible de déterminer le premier joueur");
         }
 
         while (encoreDesOffresDispo()) {
 
+            if (!joueursAyantPasJoue.contains(joueurSuivant)) {
+                joueurSuivant = joueursAyantPasJoue.getFirst();
+            }
+
             ArrayList<Joueur> joueursDispo = new ArrayList<>();
 
             for (Joueur j : joueurs) {
-                if ((j != joueurSuivant && j.getOffre() != null && j.getOffre().getStatutOffre())) {
+                if ((j != joueurSuivant && j.getOffre() != null && j.getOffre().getStatutOffre()) || (j == joueurSuivant
+                        && joueursAyantPasJoue.size() == 1)) {
                     joueursDispo.add(j);
                 }
             }
@@ -619,6 +625,8 @@ public class Partie {
             if (joueurSuivant instanceof Ordinateur) {
 
                 joueurSuivant.prendreUneOffre(null, false, joueursDispo);
+
+                joueursAyantPasJoue.remove(joueurSuivant);
 
                 for (Joueur j : joueursDispo) {
                     if (!j.getOffre().getStatutOffre()) {
@@ -659,6 +667,7 @@ public class Partie {
                 }
 
                 joueurSuivant.prendreUneOffre(cible, choixCarte.equals("C"), joueurs);
+                joueursAyantPasJoue.remove(joueurSuivant);
                 joueurSuivant = cible;
             }
         }

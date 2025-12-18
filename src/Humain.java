@@ -14,7 +14,8 @@ public class Humain extends Joueur{
             System.out.println(this.nom + ":");
             System.out.println(this.main);
             System.out.println("Choisissez la carte qui sera face cachée (0 ou 1)");
-            faceChoisieCachee = Integer.parseInt(scanner.nextLine());
+            faceChoisieCachee = scanner.nextInt();
+            scanner.nextLine();
         }
         int faceChoisieVisible = 1 - faceChoisieCachee;
         return new Offre(main.cartes.get(faceChoisieCachee), main.cartes.get(faceChoisieVisible));

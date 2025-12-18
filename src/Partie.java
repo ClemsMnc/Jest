@@ -644,7 +644,7 @@ public class Partie {
 
     public boolean encoreDesOffresDispo(){
         for (Joueur joueur : this.joueurs) {
-            if (!joueur.offre.getStatutOffre()) {
+            if (joueur.offre.getStatutOffre()) {
                 return true;
             }
         }

@@ -547,7 +547,6 @@ public class Partie {
         }
     }
 
-
     public void afficherFinJeu(){
         System.out.println("La partie est terminée !");
         System.out.println("Scores finaux :");
@@ -600,7 +599,6 @@ public class Partie {
 
         Scanner s = new Scanner(System.in);
 
-
         Joueur joueurSuivant = determinerPremierJoueur();
 
         // Sécurité
@@ -613,7 +611,7 @@ public class Partie {
             ArrayList<Joueur> joueursDispo = new ArrayList<>();
 
             for (Joueur j : joueurs) {
-                if (j != joueurSuivant && j.getOffre() != null && j.getOffre().getStatutOffre()) {
+                if ((j != joueurSuivant && j.getOffre() != null && j.getOffre().getStatutOffre())) {
                     joueursDispo.add(j);
                 }
             }
@@ -634,18 +632,13 @@ public class Partie {
                 }
             }
 
-            // ======================
-            // CAS HUMAIN
-            // ======================
             else {
-
 
                 System.out.println("Offres disponibles :");
                 for (int i = 0; i < joueursDispo.size(); i++) {
                     Joueur j = joueursDispo.get(i);
                     System.out.println(i + " - " + j.getNom() + " : " + j.getOffre());
                 }
-
 
                 System.out.println(joueurSuivant.getNom()
                         + ", choisissez une offre à prendre (entrez le numéro correspondant) :");
@@ -660,7 +653,6 @@ public class Partie {
                 }
 
                 Joueur cible = joueursDispo.get(choix);
-
 
                 System.out.println("Voulez-vous prendre la carte face visible (V) ou face cachée (C) ?");
                 String choixCarte = s.nextLine().trim().toUpperCase();

@@ -550,7 +550,7 @@ public class Partie {
             }
 
             if (gagnant != null) {
-                gagnant.getJest().getCartes().add(trophee);
+                gagnant.jest.ajouterCarte(trophee);
             }
         }
         for (Joueur j : this.joueurs) {

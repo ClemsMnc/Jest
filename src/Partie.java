@@ -465,7 +465,6 @@ public class Partie {
 
             switch (code) {
 
-                /* ================= MAJORITY ================= */
                 case "M2", "M3", "M4", "MA" -> {
                     Carte.Caractere car = switch (code) {
                         case "M2" -> Carte.Caractere.Deux;
@@ -484,7 +483,6 @@ public class Partie {
                     }
                 }
 
-                /* ================= JOKER ================= */
                 case "J" -> {
                     for (Joueur j : this.joueurs) {
                         if (j.getJest().contientJoker()) {
@@ -494,7 +492,6 @@ public class Partie {
                     }
                 }
 
-                /* ================= HIGHEST / LOWEST COULEUR ================= */
                 case "HP", "HT", "HCA", "HCO", "LP", "LT", "LCA", "LCO" -> {
 
                     boolean highest = code.startsWith("H");
@@ -520,7 +517,6 @@ public class Partie {
                     }
                 }
 
-                /* ================= BEST JEST ================= */
                 case "BJ", "BJNJ" -> {
 
                     int best = -1;
@@ -668,21 +664,7 @@ public class Partie {
         }
     }
 
-
-    public void afficherOffresDisponibles(Joueur joueurSuivant) {
-        System.out.println("Offres disponibles :");
-        int i = 0;
-        for (Joueur joueur : this.joueurs) {
-            if (joueur.offre.getStatutOffre()) {
-                if (joueur == joueurSuivant) {
-                    System.out.println(i + " - " + joueur.getNom() + " : Offre non disponible (vous ne pouvez pas prendre votre propre offre)");
-                } else {
-                    System.out.println(i + " - " + joueur.getNom() + " : " + joueur.offre);
-                }
-                i++;
-            }
-        }
-    }
+    
 
     public void faireOffres(){
         for (Joueur joueur : this.joueurs) {

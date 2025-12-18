@@ -15,7 +15,7 @@ public class VarianteNormale implements VarianteVisitor {
         Map<Integer, Integer> mapPique = new HashMap<>();
         Map<Integer, Integer> mapTrefle = new HashMap<>();
 
-        // 1. Parcours des cartes
+        // Parcours des cartes
         for (Carte c : jest.getCartes()) {
 
             if (c.isEstJoker()) {
@@ -48,7 +48,7 @@ public class VarianteNormale implements VarianteVisitor {
             }
         }
 
-        // 2. Joker + Cœurs
+        // Joker + Coeurs
         if (hasJoker) {
             if (nbCoeurs == 0) {
                 score += 4;
@@ -59,7 +59,7 @@ public class VarianteNormale implements VarianteVisitor {
             }
         }
 
-        // 3. Paires noires (+2 par paire pique + trèfle même valeur)
+        // Paires noires (+2 par paire pique + trèfle même valeur)
         for (int v : mapPique.keySet()) {
             int nbP = mapPique.get(v);
             int nbT = mapTrefle.getOrDefault(v, 0);

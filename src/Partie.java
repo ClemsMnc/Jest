@@ -603,9 +603,6 @@ public class Partie {
      * Attribue les trophées aux joueurs selon les règles du jeu.
      */
     public void distribuerTrophees() {
-        for (Joueur j : this.joueurs) {
-            System.out.println(j.getNom() + " jest : " + j.getJest());
-        }
 
         for (Carte trophee : this.trophees) {
 

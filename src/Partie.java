@@ -1,14 +1,59 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
+/**
+ * Représente une partie complète du jeu Jest.
+ * Cette classe gère :
+ * - la configuration de la partie (joueurs, cartes, trophées, variante)
+ * - le déroulement des manches
+ * - la sélection des offres
+ * - la sauvegarde et le chargement d'une partie
+ * - l'attribution des trophées
+ * - le calcul et l'affichage des scores finaux
+ */
 public class Partie {
-    ArrayList<Carte> trophees = new ArrayList<>();
-    ArrayList<Joueur> joueurs = new ArrayList<>();
-    Paquet cartes = new Paquet();
-    Paquet paquetManche = new Paquet();
-    VarianteVisitor variante = null;
-    String[] codesTropheesExistants = {"M2","M3","M4", "MA", "J", "HT", "HP", "HCA", "HCO", "NB2", "NB3", "NB4", "NBA", "LCA", "LCO", "LT", "LP", "BJNJ", "BJ"};
+    /**
+     * Liste des trophées sélectionnés pour la partie.
+     */
+    private ArrayList<Carte> trophees = new ArrayList<>();
 
+    /**
+     * Liste des joueurs participant à la partie.
+     */
+    private ArrayList<Joueur> joueurs = new ArrayList<>();
+
+    /**
+     * Paquet principal de cartes (pioche).
+     */
+    private Paquet cartes = new Paquet();
+
+    /**
+     * Paquet utilisé pour une manche.
+     */
+    private Paquet paquetManche = new Paquet();
+
+    /**
+     * Variante utilisée pour le calcul des scores.
+     */
+    private VarianteVisitor variante = null;
+
+    /**
+     * Liste des codes de trophées existants.
+     */
+    private String[] codesTropheesExistants = {
+            "M2","M3","M4","MA","J","HT","HP","HCA","HCO",
+            "NB2","NB3","NB4","NBA","LCA","LCO","LT","LP","BJNJ","BJ"
+    };
+
+
+    /**
+     * Point d'entrée du programme.
+     *
+     * Permet à l'utilisateur de lancer une nouvelle partie
+     * ou de charger une partie sauvegardée.
+     *
+     * @param args arguments de la ligne de commande
+     */
 
     public static void main(String[] args) {
 
@@ -35,7 +80,14 @@ public class Partie {
     }
 
     public Partie() {}
-
+    /**
+     * Crée le paquet de base du jeu Jest.
+     *
+     * Le paquet contient les cartes "classiques" du jeu ainsi qu'un Joker.
+     * Chaque carte est associée à un code de trophée.
+     *
+     * @return un paquet contenant les cartes de base
+     */
     public Paquet creerPaquetBase(){
         ArrayList<Carte> cartes = new ArrayList<>();
         cartes.add(new Carte(Carte.Caractere.As, Carte.Couleurs.Carreau,false,"M4"));
@@ -94,7 +146,9 @@ public class Partie {
     public void setPaquetManche(Paquet paquetManche) {
         this.paquetManche = paquetManche;
     }
-
+    /**
+     * Configure entièrement la partie.
+     */
     public void configurerPartie() {
         System.out.println("Configuration de la partie");
         System.out.println("-------------------------");
@@ -110,7 +164,9 @@ public class Partie {
         System.out.println("Configuration des trophées");
         configurerTrophees();
     }
-
+    /**
+     * Sélectionne aléatoirement les trophées de la partie.
+     */
     public void configurerTrophees() {
         this.cartes.melanger();
         this.trophees.add(this.cartes.getCarteDessus());
@@ -118,7 +174,9 @@ public class Partie {
         System.out.println("Trophées sélectionnés pour cette partie :");
         System.out.println(this.trophees);
     }
-
+    /**
+     * Configure la variante de calcul des scores.
+     */
     public void configurerVariante() {
         Scanner s = new Scanner(System.in);
         System.out.println("Veuillez choisir une variante de calcul des scores :");
@@ -141,12 +199,17 @@ public class Partie {
             case 3 -> this.variante = new VarianteCouleur();
         }
     }
-
+    /**
+     * Configure les joueurs de la partie.
+     *
+     * Permet de choisir le nombre de joueurs,
+     * leur nom et leur type (humain ou ordinateur).
+     */
     public void configurerJoueurs(){
         Scanner s = new Scanner(System.in);
         System.out.println("Veuillez choisir un nombre de joueurs :");
         int nbJoueurs = s.nextInt();
-        s.nextLine(); // je "mange" le retour à la ligne
+        s.nextLine();
         while(nbJoueurs < 2 || nbJoueurs > 4) {
             System.out.println("Nombre de joueurs invalide. Veuillez choisir un nombre de joueurs (entre 2 et 4) :");
             nbJoueurs = s.nextInt();
@@ -192,7 +255,12 @@ public class Partie {
             }
         }
     }
-
+    /**
+     * Configure le paquet de cartes utilisé pour la partie.
+     *
+     * Le paquet de base est créé, puis l'utilisateur peut
+     * ajouter des cartes spéciales.
+     */
     public void configurerCartes(){
         cartes = creerPaquetBase();
         Scanner scanner = new Scanner(System.in);
@@ -213,7 +281,15 @@ public class Partie {
             }
         }
     }
-
+    /**
+     * Crée une carte "extension" à partir des choix de l'utilisateur.
+     *
+     * L'utilisateur peut créer :
+     * - une carte normale (caractère + couleur + code trophée)
+     * - un Joker (sans caractère ni couleur) avec un code trophée
+     *
+     * @return la carte créée
+     */
     public Carte creerCarteExtension(){
         Scanner scanner = new Scanner(System.in);
 
@@ -269,7 +345,12 @@ public class Partie {
 
         return new Carte(caractere,couleur,false,reponseTrophee);
     }
-
+    /**
+     * Lance et gère le déroulement complet de la partie.
+     *
+     * La partie se déroule par manches successives jusqu'à
+     * ce que la condition de fin soit atteinte.
+     */
     public void jouerPartie() {
 
         Scanner sc = new Scanner(System.in);
@@ -302,13 +383,19 @@ public class Partie {
         afficherFinJeu();
     }
 
-
+    /**
+     * Distribue les cartes aux joueurs pour une manche.
+     */
     public void distribuerCartes() {
         for (Joueur joueur : this.joueurs) {
             this.paquetManche.distribuer(joueur, 2);
         }
     }
-
+    /**
+     * Sauvegarde l'état courant de la partie dans un fichier.
+     *
+     * @param fichier le nom du fichier de sauvegarde
+     */
     public void sauvegarderPartie(String fichier) {
 
         try (PrintWriter out = new PrintWriter(new FileWriter(fichier))) {
@@ -355,7 +442,11 @@ public class Partie {
         }
     }
 
-
+    /**
+     * Charge une partie précédemment sauvegardée depuis un fichier.
+     *
+     * @param fichier le nom du fichier de sauvegarde
+     */
     public void chargerPartie(String fichier) {
 
         try (Scanner sc = new Scanner(new File(fichier))) {
@@ -384,7 +475,7 @@ public class Partie {
                     }
                     j.setScore(score);
 
-                    sc.nextLine(); // MAIN
+                    sc.nextLine();
                     ligne = sc.nextLine();
                     while (!ligne.equals("JEST")) {
                         j.getMain().ajouterCarte(lireCarte(ligne, sc));
@@ -421,7 +512,6 @@ public class Partie {
                 }
             }
 
-            // Variante par défaut (CRUCIAL)
             if (this.variante == null) {
                 this.variante = new VarianteNormale();
             }
@@ -431,7 +521,15 @@ public class Partie {
         }
     }
 
-
+    /**
+     * Écrit une carte dans un fichier de sauvegarde.
+     *
+     * Le format écrit correspond à celui attendu par la méthode lireCarte.
+     * Si la carte est null, écrit "null" sur une seule ligne.
+     *
+     * @param out le flux d'écriture
+     * @param c la carte à écrire (peut être null)
+     */
     private void ecrireCarte(PrintWriter out, Carte c) {
         if (c == null) {
             out.println("null");
@@ -442,7 +540,22 @@ public class Partie {
             out.println(c.getCodeTrophee());
         }
     }
-
+    /**
+     * Lit une carte depuis un fichier de sauvegarde.
+     *
+     * Le paramètre premiereLigne correspond à la première ligne déjà lue :
+     * - "null" signifie que la carte est absente
+     * - sinon, cette ligne contient le booléen estJoker
+     *
+     * Les lignes suivantes sont lues dans l'ordre :
+     * - caractère (ou "null")
+     * - couleur (ou "null")
+     * - code trophée (ou "null")
+     *
+     * @param premiereLigne première ligne décrivant la carte (ou "null")
+     * @param sc scanner utilisé pour lire la suite
+     * @return la carte reconstruite ou null si premiereLigne vaut "null"
+     */
     private Carte lireCarte(String premiereLigne, Scanner sc) {
 
         if (premiereLigne.equals("null")) {
@@ -465,21 +578,30 @@ public class Partie {
         return new Carte(caractere, couleur, estJoker, code);
     }
 
-
+    /**
+     * Calcule les scores finaux à l'aide de la variante choisie.
+     *
+     * @param visitor la variante de calcul des scores
+     */
     public void accept(VarianteVisitor visitor) {
 
-        // Pour chaque joueur, on calcule le score à partir de son Jest
         for (Joueur joueur : joueurs) {
             int score = visitor.visit(joueur.getJest());
             joueur.setScore(score);
         }
     }
 
-
+    /**
+     * Indique si la partie est terminée.
+     *
+     * @return true si la partie est terminée, false sinon
+     */
     public boolean estTerminee(){
         return this.cartes.getCartes().size() < this.joueurs.size();
     }
-
+    /**
+     * Attribue les trophées aux joueurs selon les règles du jeu.
+     */
     public void distribuerTrophees() {
         for (Joueur j : this.joueurs) {
             System.out.println(j.getNom() + " jest : " + j.getJest());
@@ -565,14 +687,16 @@ public class Partie {
             }
 
             if (gagnant != null) {
-                gagnant.jest.ajouterCarte(trophee);
+                gagnant.getJest().ajouterCarte(trophee);
             }
         }
         for (Joueur j : this.joueurs) {
             System.out.println(j.getNom() + " jest : " + j.getJest());
         }
     }
-
+    /**
+     * Affiche les scores finaux et le gagnant de la partie.
+     */
     public void afficherFinJeu(){
         System.out.println("La partie est terminée !");
         System.out.println("Scores finaux :");
@@ -585,19 +709,25 @@ public class Partie {
         }
         System.out.println("Le gagnant est : " + gagnant.getNom() + " avec " + gagnant.getScore() + " points !");
     }
-
+    /**
+     * Détermine le premier joueur à jouer lors de la sélection des offres.
+     *
+     * Le premier joueur est celui qui possède la meilleure carte face visible
+     * (valeur la plus élevée, puis départage par couleur via l'ordre des enums).
+     *
+     * @return le joueur qui commence la phase de sélection des offres
+     */
     public Joueur determinerPremierJoueur(){
-        Carte meilleureCarte = this.joueurs.getFirst().offre.getCarteFaceAvant();
+        Carte meilleureCarte = this.joueurs.getFirst().getOffre().getCarteFaceAvant();
         Joueur premierJoueur = this.joueurs.get(0);
         Carte.Couleurs couleur = null;
 
         for (Joueur joueur : this.joueurs) {
-            Carte faceVisible = joueur.offre.getCarteFaceAvant();
+            Carte faceVisible = joueur.getOffre().getCarteFaceAvant();
             if (faceVisible.getValeurCarte() > meilleureCarte.getValeurCarte()) {
                 meilleureCarte = faceVisible;
                 premierJoueur = joueur;
             }
-            // Gestion des égalités de valeur, on classe grâce à la couleur
             else if (faceVisible.getValeurCarte() == meilleureCarte.getValeurCarte()) {
                 if (faceVisible.getCouleur().ordinal() > meilleureCarte.getCouleur().ordinal()) {
                     meilleureCarte = faceVisible;
@@ -608,7 +738,12 @@ public class Partie {
 
         return premierJoueur;
     }
-
+    /**
+     * Constitue le paquet de manche à partir de la pioche principale.
+     *
+     * Si le paquet de manche est vide, on y place deux cartes par joueur.
+     * Sinon, on mélange le paquet de manche et on y ajoute une carte par joueur.
+     */
     public void constituerPaquetManche(){
         if (this.paquetManche.getCartes().isEmpty()){
             this.cartes.melanger();
@@ -625,6 +760,12 @@ public class Partie {
         }
     }
 
+    /**
+     * Gère la sélection des offres par les joueurs.
+     *
+     * Les joueurs prennent les offres à tour de rôle
+     * jusqu'à ce qu'il n'y ait plus d'offres disponibles.
+     */
     public void selectionnerOffres() {
 
         Scanner s = new Scanner(System.in);
@@ -708,21 +849,37 @@ public class Partie {
     }
 
 
-
+    /**
+     * Permet aux joueurs de créer leurs offres.
+     */
     public void faireOffres(){
         for (Joueur joueur : this.joueurs) {
             joueur.setOffre(joueur.faireUneOffre());
         }
     }
-
+    /**
+     * Indique s'il reste au moins une offre disponible.
+     *
+     * Une offre est considérée disponible si son statut est à true.
+     *
+     * @return true s'il reste des offres disponibles, false sinon
+     */
     public boolean encoreDesOffresDispo(){
         for (Joueur joueur : this.joueurs) {
-            if (joueur.offre.getStatutOffre()) {
+            if (joueur.getOffre().getStatutOffre()) {
                 return true;
             }
         }
         return false;
     }
+    /**
+     * Récupère les cartes restantes dans les offres des joueurs
+     * et les remet dans le paquet de manche.
+     *
+     * Cette méthode est utile en début de manche pour éviter de perdre
+     * des cartes non prises lors de la manche précédente.
+     * Les cartes récupérées sont retirées des offres et l'offre est fermée.
+     */
     public void recupererCartesDesOffres() {
 
         for (Joueur joueur : joueurs) {

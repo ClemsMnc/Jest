@@ -364,15 +364,13 @@ public class Partie {
             cartes.getCartes().clear();
             paquetManche.getCartes().clear();
 
-            String ligne;
-
             while (sc.hasNextLine()) {
 
-                ligne = sc.nextLine();
+                String ligne = sc.nextLine();
 
                 if (ligne.equals("JOUEUR")) {
 
-                    String type = sc.nextLine(); // HUMAIN / ORDINATEUR
+                    String type = sc.nextLine();
                     String nom = sc.nextLine();
                     int score = Integer.parseInt(sc.nextLine());
 
@@ -380,7 +378,9 @@ public class Partie {
                     if (type.equals("HUMAIN")) {
                         j = new Humain(nom);
                     } else {
-                        j = new Ordinateur(nom);
+                        Ordinateur o = new Ordinateur(nom);
+                        o.setStrategie(new Strategie1()); // IMPORTANT
+                        j = o;
                     }
                     j.setScore(score);
 
@@ -391,16 +391,16 @@ public class Partie {
                         ligne = sc.nextLine();
                     }
 
-                    ligne = sc.nextLine(); // première carte JEST
+                    ligne = sc.nextLine();
                     while (!ligne.equals("OFFRE")) {
                         j.getJest().ajouterCarte(lireCarte(ligne, sc));
                         ligne = sc.nextLine();
                     }
 
-                    Carte visible = lireCarte(sc.nextLine(), sc);
-                    Carte cachee  = lireCarte(sc.nextLine(), sc);
-                    if (visible != null || cachee != null) {
-                        j.setOffre(new Offre(visible, cachee));
+                    Carte v = lireCarte(sc.nextLine(), sc);
+                    Carte c = lireCarte(sc.nextLine(), sc);
+                    if (v != null || c != null) {
+                        j.setOffre(new Offre(v, c));
                     }
 
                     joueurs.add(j);
@@ -421,6 +421,11 @@ public class Partie {
                 }
             }
 
+            // Variante par défaut (CRUCIAL)
+            if (this.variante == null) {
+                this.variante = new VarianteNormale();
+            }
+
         } catch (Exception e) {
             System.out.println("Erreur chargement : " + e.getMessage());
         }
@@ -439,17 +444,27 @@ public class Partie {
     }
 
     private Carte lireCarte(String premiereLigne, Scanner sc) {
+
         if (premiereLigne.equals("null")) {
             return null;
         }
 
         boolean estJoker = Boolean.parseBoolean(premiereLigne);
-        Carte.Caractere caractere = Carte.Caractere.valueOf(sc.nextLine());
-        Carte.Couleurs couleur = Carte.Couleurs.valueOf(sc.nextLine());
-        String codeTrophee = sc.nextLine();
 
-        return new Carte(caractere, couleur, estJoker, codeTrophee);
+        String carLine = sc.nextLine();
+        Carte.Caractere caractere =
+                carLine.equals("null") ? null : Carte.Caractere.valueOf(carLine);
+
+        String coulLine = sc.nextLine();
+        Carte.Couleurs couleur =
+                coulLine.equals("null") ? null : Carte.Couleurs.valueOf(coulLine);
+
+        String code = sc.nextLine();
+        if (code.equals("null")) code = null;
+
+        return new Carte(caractere, couleur, estJoker, code);
     }
+
 
     public void accept(VarianteVisitor visitor) {
 

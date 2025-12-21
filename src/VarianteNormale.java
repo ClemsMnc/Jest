@@ -10,10 +10,10 @@ public class VarianteNormale implements VarianteVisitor {
 
         boolean hasJoker = false;
         int nbCoeurs = 0;
-        int sommeCoeurs = 0;
+        int sommeCoeursFace = 0; // As = 1 ici
 
-        Map<Integer, Integer> mapPique = new HashMap<>();
-        Map<Integer, Integer> mapTrefle = new HashMap<>();
+        Map<Integer, Integer> pique = new HashMap<>();
+        Map<Integer, Integer> trefle = new HashMap<>();
 
         // Parcours des cartes
         for (Carte c : jest.getCartes()) {
@@ -23,28 +23,29 @@ public class VarianteNormale implements VarianteVisitor {
                 continue;
             }
 
-            int val = valeurCarte(c, jest);
+            int face = valeurFace(c); // As = 1
+            int valeurNormale = valeurNormale(c, jest);
 
             switch (c.getCouleur()) {
 
-                case Pique:
-                    score += val;
-                    mapPique.put(val, mapPique.getOrDefault(val, 0) + 1);
-                    break;
+                case Pique -> {
+                    score += valeurNormale;
+                    pique.put(face, pique.getOrDefault(face, 0) + 1);
+                }
 
-                case Trefle:
-                    score += val;
-                    mapTrefle.put(val, mapTrefle.getOrDefault(val, 0) + 1);
-                    break;
+                case Trefle -> {
+                    score += valeurNormale;
+                    trefle.put(face, trefle.getOrDefault(face, 0) + 1);
+                }
 
-                case Carreau:
-                    score -= val;
-                    break;
+                case Carreau -> {
+                    score -= valeurNormale;
+                }
 
-                case Coeur:
+                case Coeur -> {
                     nbCoeurs++;
-                    sommeCoeurs += val;
-                    break;
+                    sommeCoeursFace += face;
+                }
             }
         }
 
@@ -52,46 +53,43 @@ public class VarianteNormale implements VarianteVisitor {
         if (hasJoker) {
             if (nbCoeurs == 0) {
                 score += 4;
-            } else if (nbCoeurs >= 1 && nbCoeurs <= 3) {
-                score -= sommeCoeurs;
-            } else if (nbCoeurs == 4) {
-                score += sommeCoeurs;
+            } else if (nbCoeurs <= 3) {
+                score -= sommeCoeursFace;
+            } else {
+                score += sommeCoeursFace;
             }
         }
 
-        // Paires noires (+2 par paire pique + trèfle même valeur)
-        for (int v : mapPique.keySet()) {
-            int nbP = mapPique.get(v);
-            int nbT = mapTrefle.getOrDefault(v, 0);
-            score += Math.min(nbP, nbT) * 2;
+        // Paires noires
+        for (int v : pique.keySet()) {
+            score += Math.min(pique.get(v), trefle.getOrDefault(v, 0)) * 2;
         }
 
         return score;
     }
 
-    // Valeur d’une carte (As = 5 s’il est seul de sa couleur)
-    private int valeurCarte(Carte c, Paquet jest) {
+    // Valeur face (As = 1)
+    private int valeurFace(Carte c) {
+        return switch (c.getCaractere()) {
+            case Deux -> 2;
+            case Trois -> 3;
+            case Quatre -> 4;
+            case As -> 1;
+        };
+    }
 
-        int base;
-        switch (c.getCaractere()) {
-            case Deux: base = 2; break;
-            case Trois: base = 3; break;
-            case Quatre: base = 4; break;
-            case As: base = 1; break;
-            default: base = 0;
+    // Valeur normale (As = 5 s'il est seul de sa couleur)
+    private int valeurNormale(Carte c, Paquet jest) {
+        if (c.getCaractere() != Carte.Caractere.As) {
+            return valeurFace(c);
         }
 
-        if (c.getCaractere() == Carte.Caractere.As) {
-            boolean seul = true;
-            for (Carte other : jest.getCartes()) {
-                if (other != c && !other.isEstJoker()
-                        && other.getCouleur() == c.getCouleur()) {
-                    seul = false;
-                }
+        for (Carte other : jest.getCartes()) {
+            if (other != c && !other.isEstJoker()
+                    && other.getCouleur() == c.getCouleur()) {
+                return 1;
             }
-            if (seul) base = 5;
         }
-
-        return base;
+        return 5;
     }
 }

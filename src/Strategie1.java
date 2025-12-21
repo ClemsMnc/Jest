@@ -26,20 +26,7 @@ public class Strategie1 implements Strategie {
 
 
     @Override
-    public void strategiePrendreOffre(ArrayList<Joueur> joueurs) {
-//        ArrayList<Joueur> joueursOffresDispo = new ArrayList<>();
-//
-//        for (Joueur j : joueurs) {
-//
-//            if (j == joueur) continue;
-//            Offre o = j.getOffre();
-//
-//            if (o != null && o.getStatutOffre()) {
-//                joueursOffresDispo.add(j);
-//            }
-//        }
-//
-//        if (joueursOffresDispo.isEmpty()) return;
+    public void strategiePrendreOffre(Joueur joueur, ArrayList<Joueur> joueurs) {
 
         Joueur cible = joueurs.get((int) (Math.random() * joueurs.size()));
         Offre offreCible = cible.getOffre();
@@ -47,7 +34,12 @@ public class Strategie1 implements Strategie {
         boolean prendreCachee = Math.random() < 0.5;
         Carte cartePrise = offreCible.prendreCarte(prendreCachee);
 
+        if (cartePrise != null) {
+            joueur.getJest().ajouterCarte(cartePrise); // 🔥 ENFIN AU BON ENDROIT
+        }
+
         offreCible.setStatutOffre(false);
+
 
     }
 }

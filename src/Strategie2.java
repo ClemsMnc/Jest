@@ -28,7 +28,7 @@ public class Strategie2 implements Strategie {
 
 
     @Override
-    public void strategiePrendreOffre(ArrayList<Joueur> joueurs) {
+    public void strategiePrendreOffre(Joueur joueur, ArrayList<Joueur> joueurs) {
 
         Joueur meilleureCible = null;
         boolean prendreCachee = false;
@@ -70,7 +70,7 @@ public class Strategie2 implements Strategie {
         offreChoisie.setStatutOffre(false);
 
         if (prise != null) {
-            meilleureCible.getJest().ajouterCarte(prise);
+            joueur.getJest().ajouterCarte(prise);
         }
     }
 

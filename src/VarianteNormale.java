@@ -10,12 +10,12 @@ public class VarianteNormale implements VarianteVisitor {
 
         boolean hasJoker = false;
         int nbCoeurs = 0;
-        int sommeCoeursFace = 0; // As = 1 ici
+        int sommeCoeursBrute = 0; // As = 1 ici
 
         Map<Integer, Integer> pique = new HashMap<>();
         Map<Integer, Integer> trefle = new HashMap<>();
 
-        // Parcours des cartes
+        // 1ère passe : analyse
         for (Carte c : jest.getCartes()) {
 
             if (c.isEstJoker()) {
@@ -24,39 +24,41 @@ public class VarianteNormale implements VarianteVisitor {
             }
 
             int face = valeurFace(c); // As = 1
-            int valeurNormale = valeurNormale(c, jest);
 
             switch (c.getCouleur()) {
 
                 case Pique -> {
-                    score += valeurNormale;
+                    int val = valeurNormale(c, jest);
+                    score += val;
                     pique.put(face, pique.getOrDefault(face, 0) + 1);
                 }
 
                 case Trefle -> {
-                    score += valeurNormale;
+                    int val = valeurNormale(c, jest);
+                    score += val;
                     trefle.put(face, trefle.getOrDefault(face, 0) + 1);
                 }
 
                 case Carreau -> {
-                    score -= valeurNormale;
+                    int val = valeurNormale(c, jest);
+                    score -= val;
                 }
 
                 case Coeur -> {
                     nbCoeurs++;
-                    sommeCoeursFace += face;
+                    sommeCoeursBrute += face; // IMPORTANT
                 }
             }
         }
 
-        // Joker + Coeurs
+        // Joker + Cœurs
         if (hasJoker) {
             if (nbCoeurs == 0) {
                 score += 4;
             } else if (nbCoeurs <= 3) {
-                score -= sommeCoeursFace;
+                score -= sommeCoeursBrute;
             } else {
-                score += sommeCoeursFace;
+                score += sommeCoeursBrute;
             }
         }
 
@@ -68,17 +70,16 @@ public class VarianteNormale implements VarianteVisitor {
         return score;
     }
 
-    // Valeur face (As = 1)
     private int valeurFace(Carte c) {
         return switch (c.getCaractere()) {
             case Deux -> 2;
             case Trois -> 3;
             case Quatre -> 4;
             case As -> 1;
+            default -> 0;
         };
     }
 
-    // Valeur normale (As = 5 s'il est seul de sa couleur)
     private int valeurNormale(Carte c, Paquet jest) {
         if (c.getCaractere() != Carte.Caractere.As) {
             return valeurFace(c);

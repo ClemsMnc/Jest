@@ -898,4 +898,11 @@ public class Partie {
         }
     }
 
+    public String[] getCodesTropheesExistants() {
+        return codesTropheesExistants;
+    }
+
+    public VarianteVisitor getVariante() {
+        return variante;
+    }
 }

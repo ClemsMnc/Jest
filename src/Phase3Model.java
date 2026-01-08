@@ -1,34 +1,16 @@
 import java.util.*;
-import java.util.stream.Collectors;
 
-/**
- * MODELE MVC (Observable) :
- * - gère la config (sans Scanner)
- * - gère la partie (sans Scanner)
- * - notifie CLI + GUI avec un snapshot
- *
- * Conforme au TP : Observable / Observer + vue CLI en thread :contentReference[oaicite:1]{index=1}
- */
 public class Phase3Model extends Observable {
 
-    // ====== phases ======
-    private enum Phase {
-        SETUP,                 // configuration
-        DEAL,                  // distribuer + créer les offres
-        WAIT_OFFER_HUMAN,      // attendre offer 0/1
-        TAKE,                  // prises (ordi auto)
-        WAIT_TAKE_HUMAN,       // attendre take ...
-        END
-    }
-
+    private enum Phase { SETUP, DEAL, WAIT_OFFER_HUMAN, TAKE, WAIT_TAKE_HUMAN, END }
     private Phase phase = Phase.SETUP;
 
-    // ====== config ======
+    // SETUP
     private int nbJoueursAttendu = 0;
     private final ArrayList<Joueur> joueursConfig = new ArrayList<>();
     private VarianteVisitor variante = new VarianteNormale();
 
-    // ====== partie ======
+    // JEU
     private Partie partie = null;
     private int manche = 0;
 
@@ -40,52 +22,79 @@ public class Phase3Model extends Observable {
 
     private String lastMessage = "";
 
-    // =======================
-    //   PUBLIC API (Controller)
-    // =======================
-
     public synchronized void publishState(String msg) {
         lastMessage = msg == null ? "" : msg;
         publish();
     }
 
     public synchronized void setNbJoueurs(int n) {
-        if (phase != Phase.SETUP) { publishState("Impossible: la partie a déjà démarré."); return; }
-        if (n < 2 || n > 6) { publishState("nb joueurs invalide (2..6)."); return; }
+        if (phase != Phase.SETUP) {
+            publishState("Impossible: déjà démarré.");
+            return;
+        }
+        if (n < 2 || n > 6) {
+            publishState("nb joueurs invalide (2..6).");
+            return;
+        }
         nbJoueursAttendu = n;
         publishState("nb joueurs attendu = " + n);
     }
 
     public synchronized void addHuman(String nom) {
-        if (phase != Phase.SETUP) { publishState("Impossible: la partie a déjà démarré."); return; }
-        if (nbJoueursAttendu == 0) { publishState("D'abord: players <n>."); return; }
-        if (joueursConfig.size() >= nbJoueursAttendu) { publishState("Déjà assez de joueurs."); return; }
-        if (nom == null || nom.isBlank()) { publishState("Nom invalide."); return; }
-        if (nameExists(nom)) { publishState("Nom déjà utilisé."); return; }
-
+        if (phase != Phase.SETUP) {
+            publishState("Impossible: déjà démarré."); return;
+        }
+        if (nbJoueursAttendu == 0) {
+            publishState("D'abord: players <n>."); return;
+        }
+        if (joueursConfig.size() >= nbJoueursAttendu) {
+            publishState("Déjà assez de joueurs.");
+            return;
+        }
+        if (nom == null || nom.isBlank()) { publishState("Nom invalide.");
+            return;
+        }
+        if (nameExists(nom)) { publishState("Nom déjà utilisé.");
+            return;
+        }
         joueursConfig.add(new Humain(nom.trim()));
         publishState("Ajout humain: " + nom);
     }
 
     public synchronized void addAI(String nom, int strat) {
-        if (phase != Phase.SETUP) { publishState("Impossible: la partie a déjà démarré."); return; }
-        if (nbJoueursAttendu == 0) { publishState("D'abord: players <n>."); return; }
-        if (joueursConfig.size() >= nbJoueursAttendu) { publishState("Déjà assez de joueurs."); return; }
-        if (nom == null || nom.isBlank()) { publishState("Nom invalide."); return; }
-        if (nameExists(nom)) { publishState("Nom déjà utilisé."); return; }
+        if (phase != Phase.SETUP) { publishState("Impossible: déjà démarré.");
+            return;
+        }
+        if (nbJoueursAttendu == 0) { publishState("D'abord: players <n>.");
+            return;
+        }
+        if (joueursConfig.size() >= nbJoueursAttendu) {
+            publishState("Déjà assez de joueurs.");
+            return;
+        }
+        if (nom == null || nom.isBlank()) {
+            publishState("Nom invalide.");
+            return;
+        }
+        if (nameExists(nom)) { publishState("Nom déjà utilisé.");
+            return;
+        }
 
         Ordinateur o = new Ordinateur(nom.trim());
-        if (strat == 2) o.setStrategie(new Strategie2());
-        else o.setStrategie(new Strategie1());
+        o.setStrategie(strat == 2 ? new Strategie2() : new Strategie1());
         joueursConfig.add(o);
 
         publishState("Ajout ordi: " + nom + " (s" + (strat == 2 ? "2" : "1") + ")");
     }
 
     public synchronized void setVariante(String v) {
-        if (phase != Phase.SETUP) { publishState("Impossible: la partie a déjà démarré."); return; }
-        if (v == null) { publishState("Variante invalide."); return; }
-
+        if (phase != Phase.SETUP) { publishState("Impossible: déjà démarré.");
+            return;
+        }
+        if (v == null) {
+            publishState("Variante invalide.");
+            return;
+        }
         String s = v.trim().toLowerCase();
         switch (s) {
             case "normale" -> variante = new VarianteNormale();
@@ -97,40 +106,50 @@ public class Phase3Model extends Observable {
     }
 
     public synchronized void startGame() {
-        if (phase != Phase.SETUP) { publishState("Déjà démarré."); return; }
-        if (nbJoueursAttendu == 0) { publishState("D'abord: players <n>."); return; }
+        if (phase != Phase.SETUP) {
+            publishState("Déjà démarré.");
+            return;
+        }
+        if (nbJoueursAttendu == 0) {
+            publishState("D'abord: players <n>.");
+            return;
+        }
         if (joueursConfig.size() != nbJoueursAttendu) {
             publishState("Il manque des joueurs (" + joueursConfig.size() + "/" + nbJoueursAttendu + ").");
             return;
         }
 
-        // construire Partie avec ta logique métier, sans Scanner
         partie = new Partie();
         partie.setCartes(partie.creerPaquetBase());
         partie.setJoueurs(new ArrayList<>(joueursConfig));
-        partie.configurerTrophees(); // pas de Scanner
-        manche = 0;
+        partie.configurerTrophees();
 
+        manche = 0;
         phase = Phase.DEAL;
-        publishState("Partie démarrée. (next pour avancer si besoin)");
+
+        publishState("Partie démarrée.");
         autoAdvanceUntilHumanNeeded();
         publish();
     }
 
     public synchronized void next() {
         if (phase == Phase.END) return;
-        if (phase == Phase.SETUP) { publishState("En config. Utilise start."); return; }
+        if (phase == Phase.SETUP) {
+            publishState("En config. Utilise start.");
+            return;
+        }
         autoAdvanceUntilHumanNeeded();
         publish();
     }
 
-    // HUMAIN : choix carte cachée
     public synchronized void humanCreateOffer(int idx) {
         if (phase != Phase.WAIT_OFFER_HUMAN || currentHumanOffer == null) {
-            publishState("Pas en attente de création d'offre.");
+            publishState("Pas en attente d'offre.");
             return;
         }
-        if (idx != 0 && idx != 1) { publishState("Index invalide (0 ou 1)."); return; }
+        if (idx != 0 && idx != 1) { publishState("Index invalide (0|1).");
+            return;
+        }
 
         Carte c0 = currentHumanOffer.getMain().getCartes().get(0);
         Carte c1 = currentHumanOffer.getMain().getCartes().get(1);
@@ -139,7 +158,7 @@ public class Phase3Model extends Observable {
         Carte visible = (idx == 0) ? c1 : c0;
 
         currentHumanOffer.setOffre(new Offre(visible, cachee));
-        currentHumanOffer.setMain(new Paquet()); // comme Humain.faireUneOffre()
+        currentHumanOffer.setMain(new Paquet());
 
         humansWaitingOffer.remove(currentHumanOffer);
         String done = currentHumanOffer.getNom();
@@ -148,36 +167,37 @@ public class Phase3Model extends Observable {
         if (!humansWaitingOffer.isEmpty()) {
             currentHumanOffer = humansWaitingOffer.getFirst();
             phase = Phase.WAIT_OFFER_HUMAN;
-            publishState("Offre OK pour " + done + ". Au tour de " + currentHumanOffer.getNom() + " (offer 0/1).");
+            publishState("Offre OK pour " + done + ". Au tour de " + currentHumanOffer.getNom());
             return;
         }
 
-        // toutes les offres prêtes -> prises
         initTakePhase();
         phase = Phase.TAKE;
         autoAdvanceUntilHumanNeeded();
         publish();
     }
 
-    // HUMAIN : prise
     public synchronized void humanTakeOffer(String cibleNom, boolean prendreCachee) {
         if (phase != Phase.WAIT_TAKE_HUMAN || joueurCourant == null) {
-            publishState("Pas en attente d'une prise humaine.");
+            publishState("Pas en attente de prise.");
             return;
         }
 
         Joueur cible = findPlayerByName(cibleNom);
-        if (cible == null) { publishState("Cible introuvable: " + cibleNom); return; }
+        if (cible == null) { publishState("Cible introuvable: " + cibleNom);
+            return;
+        }
 
-        ArrayList<Joueur> joueursDispo = computeJoueursDispo(joueurCourant);
-        if (!joueursDispo.contains(cible)) { publishState("Offre non prenable maintenant."); return; }
+        ArrayList<Joueur> dispo = computeJoueursDispo(joueurCourant);
+        if (!dispo.contains(cible)) { publishState("Offre non prenable maintenant.");
+            return; }
 
-        // même logique que Partie.selectionnerOffres()
         joueurCourant.prendreUneOffre(cible, prendreCachee, partie.getJoueurs());
         joueursAyantPasJoue.remove(joueurCourant);
         joueurCourant = cible;
 
-        publishState("Prise OK. Prochain joueur: " + joueurCourant.getNom());
+        publishState("Prise OK. Prochain: " + joueurCourant.getNom());
+
         if (!partie.encoreDesOffresDispo()) {
             endRoundOrGame();
             publish();
@@ -188,10 +208,6 @@ public class Phase3Model extends Observable {
         autoAdvanceUntilHumanNeeded();
         publish();
     }
-
-    // =======================
-    //   LOGIQUE INTERNE (jeu)
-    // =======================
 
     private void autoAdvanceUntilHumanNeeded() {
         while (true) {
@@ -219,31 +235,30 @@ public class Phase3Model extends Observable {
                     joueurCourant = joueursAyantPasJoue.getFirst();
                 }
 
-                ArrayList<Joueur> joueursDispo = computeJoueursDispo(joueurCourant);
-                if (joueursDispo.isEmpty()) {
+                ArrayList<Joueur> dispo = computeJoueursDispo(joueurCourant);
+                if (dispo.isEmpty()) {
                     endRoundOrGame();
                     continue;
                 }
 
                 if (joueurCourant instanceof Ordinateur) {
-                    // comme ta CLI : ordi joue, puis next = celui dont l’offre est devenue inactive
-                    joueurCourant.prendreUneOffre(null, false, joueursDispo);
+                    joueurCourant.prendreUneOffre(null, false, dispo);
                     joueursAyantPasJoue.remove(joueurCourant);
 
-                    for (Joueur j : joueursDispo) {
+                    // prochain = celui dont l'offre vient d'être fermée (comme ta CLI)
+                    for (Joueur j : dispo) {
                         Offre o = j.getOffre();
                         if (o != null && !o.getStatutOffre()) {
                             joueurCourant = j;
                             break;
                         }
                     }
-
                     lastMessage = "Ordinateur a joué. Prochain: " + (joueurCourant == null ? "-" : joueurCourant.getNom());
                     continue;
                 }
 
                 phase = Phase.WAIT_TAKE_HUMAN;
-                lastMessage = "Tour de " + joueurCourant.getNom() + " : take <Nom> visible|cachee";
+                lastMessage = "Tour de " + joueurCourant.getNom() + " : clique sur une carte d’une offre.";
                 return;
             }
 
@@ -254,12 +269,10 @@ public class Phase3Model extends Observable {
     private void startRound() {
         manche++;
 
-        // même logique que ta jouerPartie() mais sans Scanner :
         partie.recupererCartesDesOffres();
         partie.constituerPaquetManche();
         partie.distribuerCartes();
 
-        // offres : ordi auto, humains en attente
         humansWaitingOffer.clear();
         for (Joueur j : partie.getJoueurs()) {
             if (j instanceof Ordinateur) {
@@ -272,7 +285,7 @@ public class Phase3Model extends Observable {
         if (!humansWaitingOffer.isEmpty()) {
             currentHumanOffer = humansWaitingOffer.getFirst();
             phase = Phase.WAIT_OFFER_HUMAN;
-            lastMessage = "Manche " + manche + " : " + currentHumanOffer.getNom() + " doit choisir (offer 0/1).";
+            lastMessage = "Manche " + manche + " : " + currentHumanOffer.getNom() + " choisit la carte cachée (clic).";
         } else {
             initTakePhase();
             phase = Phase.TAKE;
@@ -288,7 +301,6 @@ public class Phase3Model extends Observable {
 
     private void endRoundOrGame() {
         if (partie.estTerminee()) {
-            // fin comme ta CLI : chacun prend la dernière carte restante
             for (Joueur j : partie.getJoueurs()) {
                 Offre o = j.getOffre();
                 if (o == null) continue;
@@ -309,14 +321,12 @@ public class Phase3Model extends Observable {
 
     private void endGame() {
         partie.distribuerTrophees();
-        partie.accept(variante); // variante choisie en config
+        partie.accept(variante);
         phase = Phase.END;
         lastMessage = "FIN DE PARTIE.";
     }
 
-    // =======================
-    //   HELPERS + SNAPSHOT
-    // =======================
+    // ==== helpers ====
 
     private boolean nameExists(String nom) {
         for (Joueur j : joueursConfig) if (j.getNom().equalsIgnoreCase(nom)) return true;
@@ -324,13 +334,10 @@ public class Phase3Model extends Observable {
     }
 
     private Joueur findPlayerByName(String name) {
-        for (Joueur j : partie.getJoueurs()) {
-            if (j.getNom().equalsIgnoreCase(name)) return j;
-        }
+        for (Joueur j : partie.getJoueurs()) if (j.getNom().equalsIgnoreCase(name)) return j;
         return null;
     }
 
-    // identique à ton selectionnerOffres() : cibles prenable (statutOffre true), sauf soi (sauf dernier)
     private ArrayList<Joueur> computeJoueursDispo(Joueur joueurSuivant) {
         ArrayList<Joueur> joueursDispo = new ArrayList<>();
         for (Joueur j : partie.getJoueurs()) {
@@ -347,8 +354,6 @@ public class Phase3Model extends Observable {
     }
 
     private Phase3Snapshot buildSnapshot() {
-
-        // --- setup info ---
         ArrayList<String> cfg = new ArrayList<>();
         for (Joueur j : joueursConfig) {
             if (j instanceof Ordinateur o) {
@@ -360,13 +365,14 @@ public class Phase3Model extends Observable {
         }
         String varName = (variante instanceof VarianteJoker) ? "joker" : (variante instanceof VarianteCouleur) ? "couleur" : "normale";
 
-        // --- game info ---
         int m = manche;
         String jc = null;
+
         ArrayList<String> main = new ArrayList<>();
         ArrayList<String> cibles = new ArrayList<>();
-        ArrayList<String> offres = new ArrayList<>();
+        ArrayList<Phase3Snapshot.OfferDTO> offres = new ArrayList<>();
         ArrayList<String> scores = new ArrayList<>();
+
         boolean fin = (phase == Phase.END);
 
         if (phase == Phase.WAIT_OFFER_HUMAN && currentHumanOffer != null) {
@@ -377,18 +383,17 @@ public class Phase3Model extends Observable {
         }
 
         if (partie != null) {
-            // offres affichage
             for (Joueur j : partie.getJoueurs()) {
                 Offre o = j.getOffre();
                 if (o == null) {
-                    offres.add("- " + j.getNom() + " | (pas d'offre)");
+                    offres.add(new Phase3Snapshot.OfferDTO(j.getNom(), "(pas d'offre)", false, false));
                 } else {
-                    String vis = String.valueOf(o.getCarteFaceAvant());
-                    String cach = (o.getCarteFaceCachee() == null) ? "-" : "(cachée)";
-                    offres.add("- " + j.getNom() + " | V=" + vis + " | C=" + cach + " | active=" + o.getStatutOffre());
+                    String visible = String.valueOf(o.getCarteFaceAvant());
+                    boolean hasHidden = (o.getCarteFaceCachee() != null);
+                    offres.add(new Phase3Snapshot.OfferDTO(j.getNom(), visible, hasHidden, o.getStatutOffre()));
                 }
             }
-            // scores/jest
+
             for (Joueur j : partie.getJoueurs()) {
                 scores.add("- " + j.getNom() + " | score=" + j.getScore() + " | jest=" + j.getJest().getCartes());
             }

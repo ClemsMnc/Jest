@@ -12,7 +12,7 @@ public class Phase3Main {
         Phase3GuiView gui = new Phase3GuiView(controller);
         model.addObserver(gui);
 
-        // VUE CLI (thread concurrent)
+        // VUE CLI
         Phase3CliView cli = new Phase3CliView(controller);
         model.addObserver(cli);
         new Thread(cli, "CLI-Input").start();
@@ -20,7 +20,7 @@ public class Phase3Main {
         // Afficher GUI
         javax.swing.SwingUtilities.invokeLater(() -> gui.setVisible(true));
 
-        // Publier l'état initial (phase config)
-        model.publishState("Bienvenue Phase 3 : configuration via GUI ou CLI.");
+        // phase config
+        model.publishState("Bienvenue le jeu JEST : configuration via GUI ou CLI.");
     }
 }

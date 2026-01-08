@@ -1,6 +1,19 @@
 import java.util.List;
 
 public class Phase3Snapshot {
+    public static class OfferDTO {
+        public final String owner;
+        public final String visibleText;
+        public final boolean hasHiddenCard;
+        public final boolean active;
+
+        public OfferDTO(String owner, String visibleText, boolean hasHiddenCard, boolean active) {
+            this.owner = owner;
+            this.visibleText = visibleText;
+            this.hasHiddenCard = hasHiddenCard;
+            this.active = active;
+        }
+    }
 
     public final String phase;
     public final String message;
@@ -14,10 +27,17 @@ public class Phase3Snapshot {
     // game
     public final int manche;
     public final String joueurCourant;
-    public final List<String> mainHumaine;          // si on attend offer
-    public final List<String> ciblesDisponibles;    // si on attend take
 
-    public final List<String> offresAffichage;
+    // si WAIT_OFFER_HUMAN : main à afficher (2 cartes)
+    public final List<String> mainHumaine;
+
+    // si WAIT_TAKE_HUMAN : cibles prenable (noms)
+    public final List<String> ciblesDisponibles;
+
+    // table
+    public final List<OfferDTO> offres;
+
+    // scores/jest (texte)
     public final List<String> scoresAffichage;
 
     public final boolean partieFinie;
@@ -33,7 +53,7 @@ public class Phase3Snapshot {
             String joueurCourant,
             List<String> mainHumaine,
             List<String> ciblesDisponibles,
-            List<String> offresAffichage,
+            List<OfferDTO> offres,
             List<String> scoresAffichage,
             boolean partieFinie
     ) {
@@ -47,14 +67,14 @@ public class Phase3Snapshot {
         this.joueurCourant = joueurCourant;
         this.mainHumaine = mainHumaine;
         this.ciblesDisponibles = ciblesDisponibles;
-        this.offresAffichage = offresAffichage;
+        this.offres = offres;
         this.scoresAffichage = scoresAffichage;
         this.partieFinie = partieFinie;
     }
 
     public String toCliString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("=== PHASE3 | ").append(phase).append(" ===\n");
+        sb.append("=== JEST | ").append(phase).append(" ===\n");
         if (message != null && !message.isBlank()) sb.append(message).append("\n");
 
         if (phase.startsWith("SETUP")) {
@@ -65,7 +85,7 @@ public class Phase3Snapshot {
             sb.append("- joueurs:\n");
             for (String j : joueursConfig) sb.append("  * ").append(j).append("\n");
 
-            sb.append("\nCommandes CLI config:\n");
+            sb.append("\nCommandes:\n");
             sb.append("players <n>\n");
             sb.append("human <Nom>\n");
             sb.append("ai <Nom> s1|s2\n");
@@ -78,15 +98,20 @@ public class Phase3Snapshot {
         sb.append("Joueur courant: ").append(joueurCourant == null ? "-" : joueurCourant).append("\n");
 
         sb.append("\nOFFRES:\n");
-        for (String o : offresAffichage) sb.append(o).append("\n");
+        for (OfferDTO o : offres) {
+            sb.append("- ").append(o.owner)
+                    .append(" | V=").append(o.visibleText)
+                    .append(" | C=").append(o.hasHiddenCard ? "(cachée)" : "-")
+                    .append(" | active=").append(o.active)
+                    .append("\n");
+        }
 
         sb.append("\nSCORES/JEST:\n");
         for (String s : scoresAffichage) sb.append(s).append("\n");
 
         if (mainHumaine != null && !mainHumaine.isEmpty()) {
-            sb.append("\nMAIN (choisir carte cachée):\n");
+            sb.append("\nMAIN (cliquer/cmd offer 0|1):\n");
             for (int i = 0; i < mainHumaine.size(); i++) sb.append(i).append(") ").append(mainHumaine.get(i)).append("\n");
-            sb.append("Commande: offer 0|1\n");
         }
 
         if (ciblesDisponibles != null && !ciblesDisponibles.isEmpty()) {

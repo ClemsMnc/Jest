@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.*;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -7,50 +9,55 @@ public class Phase3GuiView extends JFrame implements Observer {
 
     private final Phase3Controller controller;
 
-    // affichage
     private final JLabel lblTop = new JLabel("Phase 3 - MVC (GUI + CLI)");
-    private final JTextArea area = new JTextArea(18, 70);
 
-    // ===== SETUP panel =====
+    private final JTextArea areaLog = new JTextArea(10, 70);
+    private final JPanel tablePanel = new JPanel();
+    private final JPanel handPanel  = new JPanel();
+
     private final JSpinner spPlayers = new JSpinner(new SpinnerNumberModel(2, 2, 6, 1));
     private final JButton btnPlayers = new JButton("Fixer nb joueurs");
-
     private final JTextField tfName = new JTextField(10);
     private final JComboBox<String> cbType = new JComboBox<>(new String[]{"HUMAIN", "ORDI"});
     private final JComboBox<String> cbStrat = new JComboBox<>(new String[]{"s1", "s2"});
     private final JButton btnAdd = new JButton("Ajouter joueur");
-
     private final JComboBox<String> cbVar = new JComboBox<>(new String[]{"normale", "joker", "couleur"});
     private final JButton btnVar = new JButton("Choisir variante");
-
     private final JButton btnStart = new JButton("START");
 
-    // ===== GAME panel =====
     private final JButton btnNext = new JButton("Next");
-    private final JButton btnOffer0 = new JButton("Offer: cacher 0");
-    private final JButton btnOffer1 = new JButton("Offer: cacher 1");
 
-    private final JComboBox<String> cbCibles = new JComboBox<>();
-    private final JButton btnTakeV = new JButton("Prendre visible");
-    private final JButton btnTakeC = new JButton("Prendre cachée");
+    private Phase3Snapshot lastSnap = null;
 
     public Phase3GuiView(Phase3Controller controller) {
-        super("Jest - Phase 3");
+        super("Jest - Phase 3 (Table cliquable)");
         this.controller = controller;
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout(10,10));
+        setLayout(new BorderLayout(10, 10));
 
         lblTop.setFont(lblTop.getFont().deriveFont(Font.BOLD, 16f));
         add(lblTop, BorderLayout.NORTH);
 
-        area.setEditable(false);
-        area.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
-        add(new JScrollPane(area), BorderLayout.CENTER);
+        JPanel center = new JPanel(new BorderLayout(10, 10));
 
-        JPanel bottom = new JPanel(new GridLayout(2,1));
+        tablePanel.setBorder(BorderFactory.createTitledBorder("Table (offres) - Clique une carte pour prendre"));
+        tablePanel.setLayout(new GridLayout(0, 2, 10, 10)); // 2 colonnes (adaptable)
 
-        // SETUP controls
+        handPanel.setBorder(BorderFactory.createTitledBorder("Main (faire une offre) - Clique la carte à mettre CACHÉE"));
+        handPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+        center.add(tablePanel, BorderLayout.CENTER);
+        center.add(handPanel, BorderLayout.SOUTH);
+
+        add(center, BorderLayout.CENTER);
+
+        areaLog.setEditable(false);
+        areaLog.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
+        add(new JScrollPane(areaLog), BorderLayout.EAST);
+
+        JPanel bottom = new JPanel(new BorderLayout());
+
         JPanel setup = new JPanel(new FlowLayout(FlowLayout.LEFT));
         setup.setBorder(BorderFactory.createTitledBorder("Configuration"));
 
@@ -71,31 +78,20 @@ public class Phase3GuiView extends JFrame implements Observer {
 
         setup.add(btnStart);
 
-        // GAME controls
-        JPanel game = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        game.setBorder(BorderFactory.createTitledBorder("Jeu"));
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        actions.setBorder(BorderFactory.createTitledBorder("Actions"));
+        actions.add(btnNext);
 
-        game.add(btnNext);
-        game.add(btnOffer0);
-        game.add(btnOffer1);
-
-        game.add(new JLabel("Cible:"));
-        game.add(cbCibles);
-        game.add(btnTakeV);
-        game.add(btnTakeC);
-
-        bottom.add(setup);
-        bottom.add(game);
+        bottom.add(setup, BorderLayout.CENTER);
+        bottom.add(actions, BorderLayout.SOUTH);
 
         add(bottom, BorderLayout.SOUTH);
 
-        // listeners setup
         btnPlayers.addActionListener(e -> controller.setNbJoueurs((Integer) spPlayers.getValue()));
 
         btnAdd.addActionListener(e -> {
             String name = tfName.getText().trim();
             if (name.isEmpty()) return;
-
             String type = (String) cbType.getSelectedItem();
             if ("ORDI".equals(type)) {
                 String s = (String) cbStrat.getSelectedItem();
@@ -109,63 +105,117 @@ public class Phase3GuiView extends JFrame implements Observer {
         btnVar.addActionListener(e -> controller.setVariante((String) cbVar.getSelectedItem()));
         btnStart.addActionListener(e -> controller.startGame());
 
-        // listeners game
+        // next
         btnNext.addActionListener(e -> controller.next());
-        btnOffer0.addActionListener(e -> controller.offerHiddenIndex(0));
-        btnOffer1.addActionListener(e -> controller.offerHiddenIndex(1));
-
-        btnTakeV.addActionListener(e -> {
-            Object sel = cbCibles.getSelectedItem();
-            if (sel != null) controller.takeOffer(sel.toString(), false);
-        });
-        btnTakeC.addActionListener(e -> {
-            Object sel = cbCibles.getSelectedItem();
-            if (sel != null) controller.takeOffer(sel.toString(), true);
-        });
 
         pack();
         setLocationRelativeTo(null);
-
-        // disable game buttons until needed
-        setOfferEnabled(false);
-        setTakeEnabled(false);
     }
 
-    private void setOfferEnabled(boolean b) {
-        btnOffer0.setEnabled(b);
-        btnOffer1.setEnabled(b);
+
+    private void rebuildTable(Phase3Snapshot snap) {
+        tablePanel.removeAll();
+
+        if (snap.offres == null) {
+            tablePanel.revalidate();
+            tablePanel.repaint();
+            return;
+        }
+
+
+        for (Phase3Snapshot.OfferDTO o : snap.offres) {
+            tablePanel.add(new OfferPanel(o, snap));
+        }
+
+        tablePanel.revalidate();
+        tablePanel.repaint();
     }
 
-    private void setTakeEnabled(boolean b) {
-        cbCibles.setEnabled(b);
-        btnTakeV.setEnabled(b);
-        btnTakeC.setEnabled(b);
+    private void rebuildHand(Phase3Snapshot snap) {
+        handPanel.removeAll();
+
+        boolean waitOffer = "WAIT_OFFER_HUMAN".equals(snap.phase) && snap.mainHumaine != null && snap.mainHumaine.size() == 2;
+
+        if (!waitOffer) {
+            handPanel.add(new JLabel("—"));
+            handPanel.revalidate();
+            handPanel.repaint();
+            return;
+        }
+
+
+        JButton c0 = new JButton("<html><b>Carte 0</b><br>" + escapeHtml(snap.mainHumaine.get(0)) + "<br><i>(cliquer = CACHÉE)</i></html>");
+        JButton c1 = new JButton("<html><b>Carte 1</b><br>" + escapeHtml(snap.mainHumaine.get(1)) + "<br><i>(cliquer = CACHÉE)</i></html>");
+
+        c0.addActionListener(e -> controller.offerHiddenIndex(0));
+        c1.addActionListener(e -> controller.offerHiddenIndex(1));
+
+        handPanel.add(c0);
+        handPanel.add(c1);
+
+        handPanel.revalidate();
+        handPanel.repaint();
+    }
+
+    private class OfferPanel extends JPanel {
+        OfferPanel(Phase3Snapshot.OfferDTO offer, Phase3Snapshot snap) {
+            setLayout(new BorderLayout());
+            setBorder(BorderFactory.createLineBorder(Color.GRAY));
+
+            JLabel owner = new JLabel("Offre de " + offer.owner);
+            owner.setHorizontalAlignment(SwingConstants.CENTER);
+            add(owner, BorderLayout.NORTH);
+
+            JPanel cards = new JPanel(new GridLayout(1, 2, 8, 8));
+
+            JButton btnVisible = new JButton("<html><b>Visible</b><br>" + escapeHtml(offer.visibleText) + "</html>");
+            JButton btnHidden  = new JButton(offer.hasHiddenCard ? "<html><b>Cachée</b><br>???</html>" : "<html><b>Cachée</b><br>-</html>");
+
+            boolean canTakePhase = "WAIT_TAKE_HUMAN".equals(snap.phase);
+            boolean cibleOk = snap.ciblesDisponibles != null && snap.ciblesDisponibles.contains(offer.owner);
+            boolean enabled = canTakePhase && cibleOk && offer.active;
+
+            btnVisible.setEnabled(enabled);
+            btnHidden.setEnabled(enabled && offer.hasHiddenCard);
+
+            btnVisible.addActionListener(e -> controller.takeOffer(offer.owner, false));
+            btnHidden.addActionListener(e -> controller.takeOffer(offer.owner, true));
+
+            cards.add(btnVisible);
+            cards.add(btnHidden);
+
+            add(cards, BorderLayout.CENTER);
+
+
+            JLabel footer = new JLabel(offer.active ? "ACTIVE" : "INACTIVE");
+            footer.setHorizontalAlignment(SwingConstants.CENTER);
+            add(footer, BorderLayout.SOUTH);
+        }
+    }
+
+    private static String escapeHtml(String s) {
+        if (s == null) return "";
+        return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
     }
 
     @Override
     public void update(Observable o, Object arg) {
         if (!(arg instanceof Phase3Snapshot snap)) return;
+        lastSnap = snap;
 
         SwingUtilities.invokeLater(() -> {
             lblTop.setText("Phase=" + snap.phase + " | manche=" + snap.manche + " | joueur=" + (snap.joueurCourant == null ? "-" : snap.joueurCourant));
-            area.setText(snap.toCliString());
+            areaLog.setText(snap.toCliString());
 
-            // refresh cibles
-            cbCibles.removeAllItems();
-            if (snap.ciblesDisponibles != null) {
-                for (String c : snap.ciblesDisponibles) cbCibles.addItem(c);
-            }
-
-            boolean waitOffer = "WAIT_OFFER_HUMAN".equals(snap.phase) && snap.mainHumaine != null && !snap.mainHumaine.isEmpty();
-            boolean waitTake  = "WAIT_TAKE_HUMAN".equals(snap.phase) && snap.ciblesDisponibles != null && !snap.ciblesDisponibles.isEmpty();
-
-            setOfferEnabled(waitOffer);
-            setTakeEnabled(waitTake);
+            rebuildTable(snap);
+            rebuildHand(snap);
 
             if (snap.partieFinie) {
                 btnNext.setEnabled(false);
-                setOfferEnabled(false);
-                setTakeEnabled(false);
+                btnStart.setEnabled(false);
+                btnAdd.setEnabled(false);
+                btnPlayers.setEnabled(false);
+                btnVar.setEnabled(false);
             }
         });
     }

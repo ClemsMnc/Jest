@@ -4,10 +4,6 @@ import java.io.InputStreamReader;
 import java.util.Observable;
 import java.util.Observer;
 
-/**
- * Vue console concurrente.
- * Conforme TP : Observer + Runnable :contentReference[oaicite:2]{index=2}
- */
 public class Phase3CliView implements Observer, Runnable {
 
     private final Phase3Controller controller;
@@ -31,7 +27,6 @@ public class Phase3CliView implements Observer, Runnable {
                 line = line.trim();
                 if (line.isEmpty()) continue;
 
-                // ===== CONFIG =====
                 if (line.toLowerCase().startsWith("players")) {
                     String[] p = line.split("\\s+");
                     if (p.length < 2) { System.out.println("Usage: players <n>"); continue; }
@@ -53,7 +48,10 @@ public class Phase3CliView implements Observer, Runnable {
                 }
                 if (line.toLowerCase().startsWith("variant")) {
                     String[] p = line.split("\\s+");
-                    if (p.length < 2) { System.out.println("Usage: variant normale|joker|couleur"); continue; }
+                    if (p.length < 2) {
+                        System.out.println("Usage: variant normale|joker|couleur");
+                        continue;
+                    }
                     controller.setVariante(p[1]);
                     continue;
                 }
@@ -62,20 +60,25 @@ public class Phase3CliView implements Observer, Runnable {
                     continue;
                 }
 
-                // ===== JEU =====
                 if (line.equalsIgnoreCase("next")) {
                     controller.next();
                     continue;
                 }
                 if (line.toLowerCase().startsWith("offer")) {
                     String[] p = line.split("\\s+");
-                    if (p.length < 2) { System.out.println("Usage: offer 0|1"); continue; }
+                    if (p.length < 2) {
+                        System.out.println("Usage: offer 0|1");
+                        continue;
+                    }
                     controller.offerHiddenIndex(Integer.parseInt(p[1]));
                     continue;
                 }
                 if (line.toLowerCase().startsWith("take")) {
                     String[] p = line.split("\\s+");
-                    if (p.length < 3) { System.out.println("Usage: take <Nom> visible|cachee"); continue; }
+                    if (p.length < 3) {
+                        System.out.println("Usage: take <Nom> visible|cachee");
+                        continue;
+                    }
                     boolean cachee = p[2].equalsIgnoreCase("cachee") || p[2].equalsIgnoreCase("c");
                     controller.takeOffer(p[1], cachee);
                     continue;

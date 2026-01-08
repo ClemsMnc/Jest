@@ -6,7 +6,6 @@ public class Phase3Controller {
         this.model = model;
     }
 
-    // ===== CONFIG =====
     public void setNbJoueurs(int n) { model.setNbJoueurs(n); }
 
     public void addHuman(String nom) { model.addHuman(nom); }
@@ -17,7 +16,6 @@ public class Phase3Controller {
 
     public void startGame() { model.startGame(); }
 
-    // ===== JEU =====
     public void next() { model.next(); }
 
     public void offerHiddenIndex(int idx) { model.humanCreateOffer(idx); }

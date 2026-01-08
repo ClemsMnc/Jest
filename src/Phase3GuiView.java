@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 import java.util.Observable;
@@ -24,6 +26,9 @@ public class Phase3GuiView extends JFrame implements Observer {
     private final JComboBox<String> cbVar = new JComboBox<>(new String[]{"normale", "joker", "couleur"});
     private final JButton btnVar = new JButton("Choisir variante");
     private final JButton btnStart = new JButton("START");
+    private final JButton btnSave = new JButton("Save");
+    private final JButton btnLoad = new JButton("Load");
+
 
     private final JButton btnNext = new JButton("Next");
 
@@ -49,6 +54,7 @@ public class Phase3GuiView extends JFrame implements Observer {
 
         center.add(tablePanel, BorderLayout.CENTER);
         center.add(handPanel, BorderLayout.SOUTH);
+
 
         add(center, BorderLayout.CENTER);
 
@@ -81,6 +87,9 @@ public class Phase3GuiView extends JFrame implements Observer {
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.LEFT));
         actions.setBorder(BorderFactory.createTitledBorder("Actions"));
         actions.add(btnNext);
+        actions.add(btnSave);
+        actions.add(btnLoad);
+
 
         bottom.add(setup, BorderLayout.CENTER);
         bottom.add(actions, BorderLayout.SOUTH);
@@ -88,6 +97,32 @@ public class Phase3GuiView extends JFrame implements Observer {
         add(bottom, BorderLayout.SOUTH);
 
         btnPlayers.addActionListener(e -> controller.setNbJoueurs((Integer) spPlayers.getValue()));
+
+        btnSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fc = new JFileChooser();
+                int result = fc.showSaveDialog(Phase3GuiView.this);
+
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    String chemin = fc.getSelectedFile().getAbsolutePath();
+                    controller.saveGame(chemin);
+                }
+            }
+        });
+        btnLoad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fc = new JFileChooser();
+                int result = fc.showOpenDialog(Phase3GuiView.this);
+
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    String chemin = fc.getSelectedFile().getAbsolutePath();
+                    controller.loadGame(chemin);
+                }
+            }
+        });
+
 
         btnAdd.addActionListener(e -> {
             String name = tfName.getText().trim();
@@ -219,4 +254,5 @@ public class Phase3GuiView extends JFrame implements Observer {
             }
         });
     }
+
 }

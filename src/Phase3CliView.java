@@ -29,20 +29,30 @@ public class Phase3CliView implements Observer, Runnable {
 
                 if (line.toLowerCase().startsWith("players")) {
                     String[] p = line.split("\\s+");
-                    if (p.length < 2) { System.out.println("Usage: players <n>"); continue; }
+                    if (p.length < 2) {
+                        System.out.println("Usage: players <n>"); continue; }
                     controller.setNbJoueurs(Integer.parseInt(p[1]));
                     continue;
                 }
                 if (line.toLowerCase().startsWith("human")) {
                     String[] p = line.split("\\s+");
-                    if (p.length < 2) { System.out.println("Usage: human <Nom>"); continue; }
+                    if (p.length < 2) {
+                        System.out.println("Usage: human <Nom>");
+                        continue;
+                    }
                     controller.addHuman(p[1]);
                     continue;
                 }
                 if (line.toLowerCase().startsWith("ai")) {
                     String[] p = line.split("\\s+");
                     if (p.length < 3) { System.out.println("Usage: ai <Nom> s1|s2"); continue; }
-                    int strat = p[2].equalsIgnoreCase("s2") ? 2 : 1;
+                    int strat;
+                    if (p[2].equalsIgnoreCase("s2")) {
+                        strat = 2;
+                    } else {
+                        strat = 1;
+                    }
+
                     controller.addAI(p[1], strat);
                     continue;
                 }
@@ -83,7 +93,19 @@ public class Phase3CliView implements Observer, Runnable {
                     controller.takeOffer(p[1], cachee);
                     continue;
                 }
+                if (line.toLowerCase().startsWith("save")) {
+                    String[] p = line.split("\\s+");
+                    if (p.length < 2) { System.out.println("Usage: save <fichier>"); continue; }
+                    controller.saveGame(p[1]);
+                    continue;
+                }
 
+                if (line.toLowerCase().startsWith("load")) {
+                    String[] p = line.split("\\s+");
+                    if (p.length < 2) { System.out.println("Usage: load <fichier>"); continue; }
+                    controller.loadGame(p[1]);
+                    continue;
+                }
                 System.out.println("Commande inconnue.");
 
             } catch (IOException e) {
@@ -92,7 +114,10 @@ public class Phase3CliView implements Observer, Runnable {
                 System.err.println("Erreur: " + e.getMessage());
             }
         }
+
+
     }
+
 
     @Override
     public void update(Observable o, Object arg) {
@@ -100,4 +125,5 @@ public class Phase3CliView implements Observer, Runnable {
             System.out.println("\n" + snap.toCliString());
         }
     }
+
 }

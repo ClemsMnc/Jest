@@ -21,4 +21,10 @@ public class Phase3Controller {
     public void offerHiddenIndex(int idx) { model.humanCreateOffer(idx); }
 
     public void takeOffer(String cibleNom, boolean prendreCachee) { model.humanTakeOffer(cibleNom, prendreCachee); }
+
+    public void saveGame(String file) { model.saveGame(file); }
+
+    public void loadGame(String file) { model.loadGame(file); }
+
 }
+

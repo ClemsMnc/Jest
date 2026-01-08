@@ -5,12 +5,11 @@ public class Phase3Model extends Observable {
     private enum Phase { SETUP, DEAL, WAIT_OFFER_HUMAN, TAKE, WAIT_TAKE_HUMAN, END }
     private Phase phase = Phase.SETUP;
 
-    // SETUP
     private int nbJoueursAttendu = 0;
     private final ArrayList<Joueur> joueursConfig = new ArrayList<>();
     private VarianteVisitor variante = new VarianteNormale();
 
-    // JEU
+
     private Partie partie = null;
     private int manche = 0;
 
@@ -23,7 +22,12 @@ public class Phase3Model extends Observable {
     private String lastMessage = "";
 
     public synchronized void publishState(String msg) {
-        lastMessage = msg == null ? "" : msg;
+        if (msg == null) {
+            lastMessage = "";
+        } else {
+            lastMessage = msg;
+        }
+
         publish();
     }
 
@@ -51,10 +55,12 @@ public class Phase3Model extends Observable {
             publishState("Déjà assez de joueurs.");
             return;
         }
-        if (nom == null || nom.isBlank()) { publishState("Nom invalide.");
+        if (nom == null || nom.isBlank()) {
+            publishState("Nom invalide.");
             return;
         }
-        if (nameExists(nom)) { publishState("Nom déjà utilisé.");
+        if (nameExists(nom)) {
+            publishState("Nom déjà utilisé.");
             return;
         }
         joueursConfig.add(new Humain(nom.trim()));
@@ -62,10 +68,12 @@ public class Phase3Model extends Observable {
     }
 
     public synchronized void addAI(String nom, int strat) {
-        if (phase != Phase.SETUP) { publishState("Impossible: déjà démarré.");
+        if (phase != Phase.SETUP) {
+            publishState("Impossible: déjà démarré.");
             return;
         }
-        if (nbJoueursAttendu == 0) { publishState("D'abord: players <n>.");
+        if (nbJoueursAttendu == 0) {
+            publishState("D'abord: players <n>.");
             return;
         }
         if (joueursConfig.size() >= nbJoueursAttendu) {
@@ -76,15 +84,24 @@ public class Phase3Model extends Observable {
             publishState("Nom invalide.");
             return;
         }
-        if (nameExists(nom)) { publishState("Nom déjà utilisé.");
+        if (nameExists(nom)) {
+            publishState("Nom déjà utilisé.");
             return;
         }
 
         Ordinateur o = new Ordinateur(nom.trim());
-        o.setStrategie(strat == 2 ? new Strategie2() : new Strategie1());
-        joueursConfig.add(o);
+        if (strat == 2) {
+            o.setStrategie(new Strategie2());
+        } else {
+            o.setStrategie(new Strategie1());
+        }
 
-        publishState("Ajout ordi: " + nom + " (s" + (strat == 2 ? "2" : "1") + ")");
+        joueursConfig.add(o);
+        if (strat == 2) {
+            publishState("Ajout ordi: " + nom + " (s2)");
+        } else {
+            publishState("Ajout ordi: " + nom + " (s1)");
+        }
     }
 
     public synchronized void setVariante(String v) {
@@ -326,17 +343,21 @@ public class Phase3Model extends Observable {
         lastMessage = "FIN DE PARTIE.";
     }
 
-    // ==== helpers ====
 
     private boolean nameExists(String nom) {
-        for (Joueur j : joueursConfig) if (j.getNom().equalsIgnoreCase(nom)) return true;
+        for (Joueur j : joueursConfig)
+            if (j.getNom().equalsIgnoreCase(nom))
+                return true;
         return false;
     }
 
     private Joueur findPlayerByName(String name) {
-        for (Joueur j : partie.getJoueurs()) if (j.getNom().equalsIgnoreCase(name)) return j;
+        for (Joueur j : partie.getJoueurs())
+            if (j.getNom().equalsIgnoreCase(name))
+                return j;
         return null;
     }
+
 
     private ArrayList<Joueur> computeJoueursDispo(Joueur joueurSuivant) {
         ArrayList<Joueur> joueursDispo = new ArrayList<>();
@@ -419,4 +440,63 @@ public class Phase3Model extends Observable {
                 fin
         );
     }
+    public synchronized void saveGame(String file) {
+
+        if (phase != Phase.DEAL) {
+            publishState("Sauvegarde refusée : autorisée uniquement entre deux manches (phase DEAL).");
+            return;
+        }
+
+        if (partie == null) {
+            publishState("Sauvegarde refusée : aucune partie en cours.");
+            return;
+        }
+
+        try {
+            partie.sauvegarderPartie(file);
+            publishState("Sauvegarde OK : " + file);
+        } catch (Exception ex) {
+            publishState("Erreur SAVE : " + ex.getClass().getSimpleName() + " : " + ex.getMessage());
+        }
+    }
+
+    public synchronized void loadGame(String file) {
+
+
+        if (phase != Phase.SETUP) {
+            publishState("Chargement refusé : uniquement au début de la partie.");
+            return;
+        }
+
+        java.io.File f = new java.io.File(file);
+        if (!f.exists() || !f.isFile()) {
+            publishState(" fichier introuvable  " + file);
+            return;
+        }
+
+        try {
+            Partie p = new Partie();
+            p.chargerPartie(file);
+
+            this.partie = p;
+            this.manche = 0;
+            this.phase = Phase.DEAL;
+
+            this.joueursConfig.clear();
+            this.nbJoueursAttendu = 0;
+
+            this.humansWaitingOffer.clear();
+            this.currentHumanOffer = null;
+            this.joueursAyantPasJoue = new ArrayList<>();
+            this.joueurCourant = null;
+
+            publishState("Chargement OK : " + file + " (tu peux faire Next pour démarrer).");
+            publish();
+
+        } catch (Exception ex) {
+            publishState("Erreur LOAD : " + ex.getClass().getSimpleName() + " : " + ex.getMessage());
+        }
+    }
+
+
 }

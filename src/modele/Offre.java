@@ -12,12 +12,12 @@ package modele;
 public class Offre {
 
     /**
-     * modele.Carte face visible de l'offre.
+     * Carte face visible de l'offre.
      */
     private Carte carteFaceAvant;
 
     /**
-     * modele.Carte face cachée de l'offre.
+     * Carte face cachée de l'offre.
      */
     private Carte carteFaceCachee;
 

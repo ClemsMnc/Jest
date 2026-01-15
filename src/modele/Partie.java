@@ -73,7 +73,7 @@ public class Partie {
             System.out.print("Nom du fichier de sauvegarde : ");
             String fichier = sc.nextLine();
             partie.chargerPartie(fichier);
-            System.out.println("modele.Partie chargée avec succès !");
+            System.out.println("Partie chargée avec succès !");
         } else {
             partie.configurerPartie();
         }
@@ -466,7 +466,7 @@ public class Partie {
                             j = new Humain(nom);
                         } else {
                             Ordinateur o = new Ordinateur(nom);
-                            o.setStrategie(new Strategie1()); // IMPORTANT
+                            o.setStrategie(new Strategie1());
                             j = o;
                         }
                         j.setScore(score);
@@ -741,7 +741,6 @@ public class Partie {
         if (this.paquetManche.getCartes().isEmpty()){
             this.cartes.melanger();
             for (Joueur joueur : this.joueurs) {
-                // a refaire au propre
                 this.paquetManche.ajouterCarte(this.cartes.getCarteDessus());
                 this.paquetManche.ajouterCarte(this.cartes.getCarteDessus());
             }

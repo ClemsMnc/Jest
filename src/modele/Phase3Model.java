@@ -142,7 +142,7 @@ public class Phase3Model extends Observable {
         manche = 0;
         phase = Phase.DEAL;
 
-        publishState("modele.Partie démarrée.");
+        publishState("Partie démarrée.");
         autoAdvanceUntilHumanNeeded();
         publish();
     }
@@ -182,7 +182,7 @@ public class Phase3Model extends Observable {
         if (!humansWaitingOffer.isEmpty()) {
             currentHumanOffer = humansWaitingOffer.getFirst();
             phase = Phase.WAIT_OFFER_HUMAN;
-            publishState("modele.Offre OK pour " + done + ". Au tour de " + currentHumanOffer.getNom());
+            publishState("Offre OK pour " + done + ". Au tour de " + currentHumanOffer.getNom());
             return;
         }
 
@@ -204,7 +204,7 @@ public class Phase3Model extends Observable {
         }
 
         ArrayList<Joueur> dispo = computeJoueursDispo(joueurCourant);
-        if (!dispo.contains(cible)) { publishState("modele.Offre non prenable maintenant.");
+        if (!dispo.contains(cible)) { publishState("Offre non prenable maintenant.");
             return; }
 
         joueurCourant.prendreUneOffre(cible, prendreCachee, partie.getJoueurs());
@@ -260,7 +260,7 @@ public class Phase3Model extends Observable {
                     joueurCourant.prendreUneOffre(null, false, dispo);
                     joueursAyantPasJoue.remove(joueurCourant);
 
-                    // prochain = celui dont l'offre vient d'être fermée (comme ta CLI)
+                    // prochain = celui dont l'offre vient d'être fermée
                     for (Joueur j : dispo) {
                         Offre o = j.getOffre();
                         if (o != null && !o.getStatutOffre()) {
@@ -268,7 +268,7 @@ public class Phase3Model extends Observable {
                             break;
                         }
                     }
-                    lastMessage = "modele.Ordinateur a joué. Prochain: " + (joueurCourant == null ? "-" : joueurCourant.getNom());
+                    lastMessage = "Ordinateur a joué. Prochain: " + (joueurCourant == null ? "-" : joueurCourant.getNom());
                     continue;
                 }
 

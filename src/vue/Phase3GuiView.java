@@ -47,7 +47,7 @@ public class Phase3GuiView extends JFrame implements Observer {
         JPanel center = new JPanel(new BorderLayout(10, 10));
 
         tablePanel.setBorder(BorderFactory.createTitledBorder("Table (offres) - Clique une carte pour prendre"));
-        tablePanel.setLayout(new GridLayout(0, 2, 10, 10)); // 2 colonnes (adaptable)
+        tablePanel.setLayout(new GridLayout(0, 2, 10, 10));
 
         handPanel.setBorder(BorderFactory.createTitledBorder("Main (faire une offre) - Clique la carte à mettre CACHÉE"));
         handPanel.setLayout(new FlowLayout(FlowLayout.LEFT));

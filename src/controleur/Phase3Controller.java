@@ -1,3 +1,6 @@
+package controleur;
+import modele.Phase3Model;
+
 public class Phase3Controller {
 
     private final Phase3Model model;

@@ -1,6 +1,6 @@
-import java.util.Scanner;
+package modele;
+
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Implémentation d'une stratégie aléatoire.

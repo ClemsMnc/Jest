@@ -1,3 +1,5 @@
+package modele;
+
 import java.util.List;
 
 public class Phase3Snapshot {
@@ -95,7 +97,7 @@ public class Phase3Snapshot {
         }
 
         sb.append("\nMANCHE: ").append(manche).append("\n");
-        sb.append("Joueur courant: ").append(joueurCourant == null ? "-" : joueurCourant).append("\n");
+        sb.append("modele.Joueur courant: ").append(joueurCourant == null ? "-" : joueurCourant).append("\n");
 
         sb.append("\nOFFRES:\n");
         for (OfferDTO o : offres) {

@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Offre.java</title>
+<title>modele.Offre.java</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style type="text/css">
 .s0 { color: #cf8e6d;}
@@ -12,20 +12,20 @@
 <table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
 <tr><td><center>
 <font face="Arial, Helvetica" color="#000000">
-Offre.java</font>
+modele.Offre.java</font>
 </center></td></tr></table>
-<pre><span class="s0">public class </span><span class="s1">Offre </span><span class="s2">{</span>
-    <span class="s0">private </span><span class="s1">Carte carteFaceAvant</span><span class="s2">;</span>
-    <span class="s0">private </span><span class="s1">Carte carteFaceCachee</span><span class="s2">;</span>
+<pre><span class="s0">public class </span><span class="s1">modele.Offre </span><span class="s2">{</span>
+    <span class="s0">private </span><span class="s1">modele.Carte carteFaceAvant</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">modele.Carte carteFaceCachee</span><span class="s2">;</span>
     <span class="s0">private boolean </span><span class="s1">statutOffre</span><span class="s2">;</span>
 
-    <span class="s0">public </span><span class="s1">Offre</span><span class="s2">(</span><span class="s1">Carte carteFaceAvant</span><span class="s2">, </span><span class="s1">Carte carteFaceCachee</span><span class="s2">) {</span>
+    <span class="s0">public </span><span class="s1">modele.Offre</span><span class="s2">(</span><span class="s1">modele.Carte carteFaceAvant</span><span class="s2">, </span><span class="s1">modele.Carte carteFaceCachee</span><span class="s2">) {</span>
         <span class="s0">this</span><span class="s2">.</span><span class="s1">carteFaceAvant </span><span class="s2">= </span><span class="s1">carteFaceAvant</span><span class="s2">;</span>
         <span class="s0">this</span><span class="s2">.</span><span class="s1">carteFaceCachee </span><span class="s2">= </span><span class="s1">carteFaceCachee</span><span class="s2">;</span>
     <span class="s2">}</span>
 
-    <span class="s0">public </span><span class="s1">Carte prendreCarte</span><span class="s2">(</span><span class="s0">boolean </span><span class="s1">faceCachee</span><span class="s2">){</span>
-        <span class="s1">Carte res</span><span class="s2">;</span>
+    <span class="s0">public </span><span class="s1">modele.Carte prendreCarte</span><span class="s2">(</span><span class="s0">boolean </span><span class="s1">faceCachee</span><span class="s2">){</span>
+        <span class="s1">modele.Carte res</span><span class="s2">;</span>
         <span class="s0">if </span><span class="s2">(</span><span class="s1">faceCachee</span><span class="s2">){</span>
             <span class="s1">res </span><span class="s2">=  </span><span class="s0">this</span><span class="s2">.</span><span class="s1">carteFaceCachee</span><span class="s2">;</span>
             <span class="s1">setCarteFaceCachee</span><span class="s2">(</span><span class="s0">null</span><span class="s2">);</span>
@@ -36,19 +36,19 @@ Offre.java</font>
         <span class="s0">return </span><span class="s1">res</span><span class="s2">;</span>
     <span class="s2">}</span>
 
-    <span class="s0">public </span><span class="s1">Carte getCarteFaceAvant</span><span class="s2">() {</span>
+    <span class="s0">public </span><span class="s1">modele.Carte getCarteFaceAvant</span><span class="s2">() {</span>
         <span class="s0">return </span><span class="s1">carteFaceAvant</span><span class="s2">;</span>
     <span class="s2">}</span>
 
-    <span class="s0">public void </span><span class="s1">setCarteFaceAvant</span><span class="s2">(</span><span class="s1">Carte carteFaceAvant</span><span class="s2">) {</span>
+    <span class="s0">public void </span><span class="s1">setCarteFaceAvant</span><span class="s2">(</span><span class="s1">modele.Carte carteFaceAvant</span><span class="s2">) {</span>
         <span class="s0">this</span><span class="s2">.</span><span class="s1">carteFaceAvant </span><span class="s2">= </span><span class="s1">carteFaceAvant</span><span class="s2">;</span>
     <span class="s2">}</span>
 
-    <span class="s0">public </span><span class="s1">Carte getCarteFaceCachee</span><span class="s2">() {</span>
+    <span class="s0">public </span><span class="s1">modele.Carte getCarteFaceCachee</span><span class="s2">() {</span>
         <span class="s0">return </span><span class="s1">carteFaceCachee</span><span class="s2">;</span>
     <span class="s2">}</span>
 
-    <span class="s0">public void </span><span class="s1">setCarteFaceCachee</span><span class="s2">(</span><span class="s1">Carte carteFaceCachee</span><span class="s2">) {</span>
+    <span class="s0">public void </span><span class="s1">setCarteFaceCachee</span><span class="s2">(</span><span class="s1">modele.Carte carteFaceCachee</span><span class="s2">) {</span>
         <span class="s0">this</span><span class="s2">.</span><span class="s1">carteFaceCachee </span><span class="s2">= </span><span class="s1">carteFaceCachee</span><span class="s2">;</span>
     <span class="s2">}</span>
 

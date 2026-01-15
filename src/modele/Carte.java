@@ -1,3 +1,5 @@
+package modele;
+
 /**
  * Représente une carte du jeu Jest.
  * Une carte est définie par :

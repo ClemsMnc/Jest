@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Strategie1.java</title>
+<title>modele.Strategie1.java</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style type="text/css">
 .s0 { color: #cf8e6d;}
@@ -14,30 +14,30 @@
 <table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
 <tr><td><center>
 <font face="Arial, Helvetica" color="#000000">
-Strategie1.java</font>
+modele.Strategie1.java</font>
 </center></td></tr></table>
 <pre><span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Scanner</span><span class="s2">;</span>
 
-<span class="s0">public class </span><span class="s1">Strategie1 </span><span class="s0">implements </span><span class="s1">Strategie </span><span class="s2">{</span>
-    <span class="s0">public </span><span class="s1">Strategie1</span><span class="s2">() {</span>
+<span class="s0">public class </span><span class="s1">modele.Strategie1 </span><span class="s0">implements </span><span class="s1">modele.Strategie </span><span class="s2">{</span>
+    <span class="s0">public </span><span class="s1">modele.Strategie1</span><span class="s2">() {</span>
     <span class="s2">}</span>
 
     <span class="s1">@Override</span>
-    <span class="s0">public </span><span class="s1">Offre strategieFaireOffre</span><span class="s2">(</span><span class="s1">Joueur joueur</span><span class="s2">) {</span>
+    <span class="s0">public </span><span class="s1">modele.Offre strategieFaireOffre</span><span class="s2">(</span><span class="s1">modele.Joueur joueur</span><span class="s2">) {</span>
         <span class="s3">// on récupère la main du joueur</span>
-        <span class="s1">Paquet main </span><span class="s2">= </span><span class="s1">joueur</span><span class="s2">.</span><span class="s1">getMain</span><span class="s2">();</span>
+        <span class="s1">modele.Paquet main </span><span class="s2">= </span><span class="s1">joueur</span><span class="s2">.</span><span class="s1">getMain</span><span class="s2">();</span>
 
         <span class="s0">int </span><span class="s1">nombre </span><span class="s2">= (</span><span class="s0">int</span><span class="s2">) (</span><span class="s1">Math</span><span class="s2">.</span><span class="s1">random</span><span class="s2">() * </span><span class="s4">2</span><span class="s2">);</span>
         <span class="s0">int </span><span class="s1">faceChoisieVisible </span><span class="s2">= </span><span class="s4">1 </span><span class="s2">- </span><span class="s1">nombre</span><span class="s2">;</span>
 
-        <span class="s0">return new </span><span class="s1">Offre</span><span class="s2">(</span>
+        <span class="s0">return new </span><span class="s1">modele.Offre</span><span class="s2">(</span>
                 <span class="s1">main</span><span class="s2">.</span><span class="s1">getCartes</span><span class="s2">().</span><span class="s1">get</span><span class="s2">(</span><span class="s1">nombre</span><span class="s2">),</span>
                 <span class="s1">main</span><span class="s2">.</span><span class="s1">getCartes</span><span class="s2">().</span><span class="s1">get</span><span class="s2">(</span><span class="s1">faceChoisieVisible</span><span class="s2">)</span>
         <span class="s2">);</span>
     <span class="s2">}</span>
 
     <span class="s1">@Override</span>
-    <span class="s0">public void </span><span class="s1">strategiePrendreOffre</span><span class="s2">(</span><span class="s1">Joueur joueur</span><span class="s2">) {</span>
+    <span class="s0">public void </span><span class="s1">strategiePrendreOffre</span><span class="s2">(</span><span class="s1">modele.Joueur joueur</span><span class="s2">) {</span>
         
     <span class="s2">}</span>
 <span class="s2">}</span>

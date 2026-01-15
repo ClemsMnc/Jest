@@ -1,3 +1,5 @@
+package modele;
+
 /**
  * Implémentation de la variante Joker de calcul des scores.
  *

@@ -1,3 +1,5 @@
+package modele;
+
 import java.util.ArrayList;
 
 /**
@@ -26,17 +28,17 @@ public abstract class Joueur {
     private Integer score;
 
     /**
-     * Paquet représentant la main du joueur.
+     * modele.Paquet représentant la main du joueur.
      */
     private Paquet main;
 
     /**
-     * Paquet représentant le Jest du joueur.
+     * modele.Paquet représentant le Jest du joueur.
      */
     private Paquet jest;
 
     /**
-     * Offre courante du joueur.
+     * modele.Offre courante du joueur.
      */
     private Offre offre;
 

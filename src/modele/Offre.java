@@ -1,3 +1,5 @@
+package modele;
+
 /**
  * Représente une offre dans le jeu Jest.
  *
@@ -10,12 +12,12 @@
 public class Offre {
 
     /**
-     * Carte face visible de l'offre.
+     * modele.Carte face visible de l'offre.
      */
     private Carte carteFaceAvant;
 
     /**
-     * Carte face cachée de l'offre.
+     * modele.Carte face cachée de l'offre.
      */
     private Carte carteFaceCachee;
 

@@ -1,3 +1,5 @@
+package modele;
+
 import java.util.*;
 
 public class Phase3Model extends Observable {
@@ -144,7 +146,7 @@ public class Phase3Model extends Observable {
         manche = 0;
         phase = Phase.DEAL;
 
-        publishState("Partie démarrée.");
+        publishState("modele.Partie démarrée.");
         autoAdvanceUntilHumanNeeded();
         publish();
     }
@@ -184,7 +186,7 @@ public class Phase3Model extends Observable {
         if (!humansWaitingOffer.isEmpty()) {
             currentHumanOffer = humansWaitingOffer.getFirst();
             phase = Phase.WAIT_OFFER_HUMAN;
-            publishState("Offre OK pour " + done + ". Au tour de " + currentHumanOffer.getNom());
+            publishState("modele.Offre OK pour " + done + ". Au tour de " + currentHumanOffer.getNom());
             return;
         }
 
@@ -206,7 +208,7 @@ public class Phase3Model extends Observable {
         }
 
         ArrayList<Joueur> dispo = computeJoueursDispo(joueurCourant);
-        if (!dispo.contains(cible)) { publishState("Offre non prenable maintenant.");
+        if (!dispo.contains(cible)) { publishState("modele.Offre non prenable maintenant.");
             return; }
 
         joueurCourant.prendreUneOffre(cible, prendreCachee, partie.getJoueurs());
@@ -270,7 +272,7 @@ public class Phase3Model extends Observable {
                             break;
                         }
                     }
-                    lastMessage = "Ordinateur a joué. Prochain: " + (joueurCourant == null ? "-" : joueurCourant.getNom());
+                    lastMessage = "modele.Ordinateur a joué. Prochain: " + (joueurCourant == null ? "-" : joueurCourant.getNom());
                     continue;
                 }
 

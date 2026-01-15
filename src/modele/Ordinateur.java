@@ -1,5 +1,6 @@
+package modele;
+
 import java.util.ArrayList;
-import java.util.Scanner;
 
 /**
  * Représente un joueur ordinateur dans le jeu Jest.

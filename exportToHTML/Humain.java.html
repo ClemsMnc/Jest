@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Humain.java</title>
+<title>modele.Humain.java</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style type="text/css">
 .s0 { color: #cf8e6d;}
@@ -14,17 +14,17 @@
 <table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
 <tr><td><center>
 <font face="Arial, Helvetica" color="#000000">
-Humain.java</font>
+modele.Humain.java</font>
 </center></td></tr></table>
 <pre><span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Scanner</span><span class="s2">;</span>
 
-<span class="s0">public class </span><span class="s1">Humain </span><span class="s0">extends </span><span class="s1">Joueur</span><span class="s2">{</span>
+<span class="s0">public class </span><span class="s1">modele.Humain </span><span class="s0">extends </span><span class="s1">modele.Joueur</span><span class="s2">{</span>
 
-    <span class="s0">public </span><span class="s1">Humain</span><span class="s2">(</span><span class="s1">String nom</span><span class="s2">) {</span>
+    <span class="s0">public </span><span class="s1">modele.Humain</span><span class="s2">(</span><span class="s1">String nom</span><span class="s2">) {</span>
         <span class="s0">super</span><span class="s2">(</span><span class="s1">nom</span><span class="s2">);</span>
     <span class="s2">}</span>
 
-    <span class="s0">public </span><span class="s1">Offre faireUneOffre</span><span class="s2">(){</span>
+    <span class="s0">public </span><span class="s1">modele.Offre faireUneOffre</span><span class="s2">(){</span>
         <span class="s1">Scanner scanner </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Scanner</span><span class="s2">(</span><span class="s1">System</span><span class="s2">.</span><span class="s1">in</span><span class="s2">);</span>
         <span class="s0">int </span><span class="s1">faceChoisieCachee </span><span class="s2">= </span><span class="s3">5</span><span class="s2">;</span>
         <span class="s0">while</span><span class="s2">( !(</span><span class="s1">faceChoisieCachee </span><span class="s2">== </span><span class="s3">0  </span><span class="s2">|| </span><span class="s1">faceChoisieCachee </span><span class="s2">== </span><span class="s3">1</span><span class="s2">)){</span>
@@ -32,10 +32,10 @@ Humain.java</font>
             <span class="s1">faceChoisieCachee </span><span class="s2">= </span><span class="s1">Integer</span><span class="s2">.</span><span class="s1">parseInt</span><span class="s2">(</span><span class="s1">scanner</span><span class="s2">.</span><span class="s1">nextLine</span><span class="s2">());</span>
         <span class="s2">}</span>
         <span class="s0">int </span><span class="s1">faceChoisieVisible </span><span class="s2">= </span><span class="s3">1 </span><span class="s2">- </span><span class="s1">faceChoisieCachee</span><span class="s2">;</span>
-        <span class="s0">return new </span><span class="s1">Offre</span><span class="s2">(</span><span class="s1">main</span><span class="s2">.</span><span class="s1">cartes</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s1">faceChoisieCachee</span><span class="s2">), </span><span class="s1">main</span><span class="s2">.</span><span class="s1">cartes</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s1">faceChoisieVisible</span><span class="s2">));</span>
+        <span class="s0">return new </span><span class="s1">modele.Offre</span><span class="s2">(</span><span class="s1">main</span><span class="s2">.</span><span class="s1">cartes</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s1">faceChoisieCachee</span><span class="s2">), </span><span class="s1">main</span><span class="s2">.</span><span class="s1">cartes</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s1">faceChoisieVisible</span><span class="s2">));</span>
     <span class="s2">}</span>
 
-    <span class="s0">public void </span><span class="s1">prendreUneOffre</span><span class="s2">(</span><span class="s1">Joueur joueur</span><span class="s2">, </span><span class="s0">boolean </span><span class="s1">faceCachee</span><span class="s2">){</span>
+    <span class="s0">public void </span><span class="s1">prendreUneOffre</span><span class="s2">(</span><span class="s1">modele.Joueur joueur</span><span class="s2">, </span><span class="s0">boolean </span><span class="s1">faceCachee</span><span class="s2">){</span>
     <span class="s2">}</span>
 <span class="s2">}</span>
 </pre>

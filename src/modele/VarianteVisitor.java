@@ -1,3 +1,5 @@
+package modele;
+
 /**
  * Interface représentant une variante de calcul des scores.
  *

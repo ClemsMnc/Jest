@@ -1,3 +1,5 @@
+package modele;
+
 /**
  * Implémentation de la variante couleur de calcul des scores.
  *

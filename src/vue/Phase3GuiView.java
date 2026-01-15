@@ -1,9 +1,12 @@
+package vue;
+
+import controleur.Phase3Controller;
+import modele.Phase3Snapshot;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.*;
-import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -179,8 +182,8 @@ public class Phase3GuiView extends JFrame implements Observer {
         }
 
 
-        JButton c0 = new JButton("<html><b>Carte 0</b><br>" + escapeHtml(snap.mainHumaine.get(0)) + "<br><i>(cliquer = CACHÉE)</i></html>");
-        JButton c1 = new JButton("<html><b>Carte 1</b><br>" + escapeHtml(snap.mainHumaine.get(1)) + "<br><i>(cliquer = CACHÉE)</i></html>");
+        JButton c0 = new JButton("<html><b>modele.Carte 0</b><br>" + escapeHtml(snap.mainHumaine.get(0)) + "<br><i>(cliquer = CACHÉE)</i></html>");
+        JButton c1 = new JButton("<html><b>modele.Carte 1</b><br>" + escapeHtml(snap.mainHumaine.get(1)) + "<br><i>(cliquer = CACHÉE)</i></html>");
 
         c0.addActionListener(e -> controller.offerHiddenIndex(0));
         c1.addActionListener(e -> controller.offerHiddenIndex(1));
@@ -197,7 +200,7 @@ public class Phase3GuiView extends JFrame implements Observer {
             setLayout(new BorderLayout());
             setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-            JLabel owner = new JLabel("Offre de " + offer.owner);
+            JLabel owner = new JLabel("modele.Offre de " + offer.owner);
             owner.setHorizontalAlignment(SwingConstants.CENTER);
             add(owner, BorderLayout.NORTH);
 

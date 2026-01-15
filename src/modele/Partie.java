@@ -1,3 +1,5 @@
+package modele;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
@@ -23,12 +25,12 @@ public class Partie {
     private ArrayList<Joueur> joueurs = new ArrayList<>();
 
     /**
-     * Paquet principal de cartes (pioche).
+     * modele.Paquet principal de cartes (pioche).
      */
     private Paquet cartes = new Paquet();
 
     /**
-     * Paquet utilisé pour une manche.
+     * modele.Paquet utilisé pour une manche.
      */
     private Paquet paquetManche = new Paquet();
 
@@ -71,7 +73,7 @@ public class Partie {
             System.out.print("Nom du fichier de sauvegarde : ");
             String fichier = sc.nextLine();
             partie.chargerPartie(fichier);
-            System.out.println("Partie chargée avec succès !");
+            System.out.println("modele.Partie chargée avec succès !");
         } else {
             partie.configurerPartie();
         }
@@ -374,7 +376,7 @@ public class Partie {
                 System.out.print("Nom du fichier de sauvegarde : ");
                 String fichier = sc.nextLine();
                 sauvegarderPartie(fichier);
-                System.out.println("Partie sauvegardée !");
+                System.out.println("modele.Partie sauvegardée !");
             }
         }
 

@@ -1,3 +1,8 @@
+package vue;
+
+import controleur.Phase3Controller;
+import modele.Phase3Snapshot;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

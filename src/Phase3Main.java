@@ -1,3 +1,8 @@
+import controleur.Phase3Controller;
+import modele.Phase3Model;
+import vue.Phase3CliView;
+import vue.Phase3GuiView;
+
 public class Phase3Main {
 
     public static void main(String[] args) {

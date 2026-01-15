@@ -145,7 +145,7 @@ public class Phase3CliView implements Observer, Runnable {
         }
 
         sb.append("\nMANCHE: ").append(snap.getManche()).append("\n");
-        sb.append("modele.Joueur courant: ").append(snap.getJoueurCourant() == null ? "-" : snap.getJoueurCourant()).append("\n");
+        sb.append("Joueur courant: ").append(snap.getJoueurCourant() == null ? "-" : snap.getJoueurCourant()).append("\n");
 
         sb.append("\nOFFRES:\n");
         for (OfferDTO o : snap.getOffres()) {

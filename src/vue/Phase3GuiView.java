@@ -30,13 +30,9 @@ public class Phase3GuiView extends JFrame implements Observer {
     private final JComboBox<String> cbVar = new JComboBox<>(new String[]{"normale", "joker", "couleur"});
     private final JButton btnVar = new JButton("Choisir variante");
     private final JButton btnStart = new JButton("START");
-    private final JButton btnSave = new JButton("Save");
-    private final JButton btnLoad = new JButton("Load");
 
 
     private final JButton btnNext = new JButton("Next");
-
-    private Phase3Snapshot lastSnap = null;
 
     public Phase3GuiView(Phase3Controller controller) {
         super("Jest - Phase 3 (Table cliquable)");
@@ -91,7 +87,9 @@ public class Phase3GuiView extends JFrame implements Observer {
         JPanel actions = new JPanel(new FlowLayout(FlowLayout.LEFT));
         actions.setBorder(BorderFactory.createTitledBorder("Actions"));
         actions.add(btnNext);
+        JButton btnSave = new JButton("Save");
         actions.add(btnSave);
+        JButton btnLoad = new JButton("Load");
         actions.add(btnLoad);
 
 
@@ -183,8 +181,8 @@ public class Phase3GuiView extends JFrame implements Observer {
         }
 
 
-        JButton c0 = new JButton("<html><b>modele.Carte 0</b><br>" + escapeHtml(snap.getMainHumaine().get(0)) + "<br><i>(cliquer = CACHÉE)</i></html>");
-        JButton c1 = new JButton("<html><b>modele.Carte 1</b><br>" + escapeHtml(snap.getMainHumaine().get(1)) + "<br><i>(cliquer = CACHÉE)</i></html>");
+        JButton c0 = new JButton("<html><b>Carte 0</b><br>" + escapeHtml(snap.getMainHumaine().get(0)) + "<br><i>(cliquer = CACHÉE)</i></html>");
+        JButton c1 = new JButton("<html><b>Carte 1</b><br>" + escapeHtml(snap.getMainHumaine().get(1)) + "<br><i>(cliquer = CACHÉE)</i></html>");
 
         c0.addActionListener(e -> controller.offerHiddenIndex(0));
         c1.addActionListener(e -> controller.offerHiddenIndex(1));
@@ -201,7 +199,7 @@ public class Phase3GuiView extends JFrame implements Observer {
             setLayout(new BorderLayout());
             setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-            JLabel owner = new JLabel("modele.Offre de " + offer.getOwner());
+            JLabel owner = new JLabel("Offre de " + offer.getOwner());
             owner.setHorizontalAlignment(SwingConstants.CENTER);
             add(owner, BorderLayout.NORTH);
 
@@ -260,7 +258,7 @@ public class Phase3GuiView extends JFrame implements Observer {
         }
 
         sb.append("\nMANCHE: ").append(snap.getManche()).append("\n");
-        sb.append("modele.Joueur courant: ").append(snap.getJoueurCourant() == null ? "-" : snap.getJoueurCourant()).append("\n");
+        sb.append("Joueur courant: ").append(snap.getJoueurCourant() == null ? "-" : snap.getJoueurCourant()).append("\n");
 
         sb.append("\nOFFRES:\n");
         for (OfferDTO o : snap.getOffres()) {
@@ -294,7 +292,6 @@ public class Phase3GuiView extends JFrame implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (!(arg instanceof Phase3Snapshot snap)) return;
-        lastSnap = snap;
 
         SwingUtilities.invokeLater(() -> {
             lblTop.setText("Phase=" + snap.getPhase() + " | manche=" + snap.getManche() + " | joueur=" + (snap.getJoueurCourant() == null ? "-" : snap.getJoueurCourant()));

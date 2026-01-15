@@ -84,7 +84,7 @@ public class Paquet {
 
     /**
      * Retourne la carte extrême d'une couleur donnée.
-     *
+     * <p>
      * Si highest est true, retourne la carte de valeur maximale.
      * Sinon, retourne la carte de valeur minimale.
      *
@@ -139,7 +139,7 @@ public class Paquet {
 
     /**
      * Distribue un nombre donné de cartes à un joueur.
-     *
+     * <p>
      * Les cartes sont retirées du paquet courant et ajoutées
      * à la main du joueur.
      *

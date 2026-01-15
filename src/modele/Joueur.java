@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Représente un joueur du jeu Jest.
- *
+ * <p>
  * Un joueur possède :
  * - un nom
  * - un score

@@ -149,10 +149,10 @@ public class Phase3CliView implements Observer, Runnable {
 
         sb.append("\nOFFRES:\n");
         for (OfferDTO o : snap.getOffres()) {
-            sb.append("- ").append(o.owner)
-                    .append(" | V=").append(o.visibleText)
-                    .append(" | C=").append(o.hasHiddenCard ? "(cachée)" : "-")
-                    .append(" | active=").append(o.active)
+            sb.append("- ").append(o.getOwner())
+                    .append(" | V=").append(o.getVisibleText())
+                    .append(" | C=").append(o.hasHiddenCard() ? "(cachée)" : "-")
+                    .append(" | active=").append(o.isActive())
                     .append("\n");
         }
 

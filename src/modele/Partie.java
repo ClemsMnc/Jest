@@ -25,12 +25,12 @@ public class Partie {
     private ArrayList<Joueur> joueurs = new ArrayList<>();
 
     /**
-     * modele.Paquet principal de cartes (pioche).
+     * Paquet principal de cartes (pioche).
      */
     private Paquet cartes = new Paquet();
 
     /**
-     * modele.Paquet utilisé pour une manche.
+     * Paquet utilisé pour une manche.
      */
     private Paquet paquetManche = new Paquet();
 
@@ -42,7 +42,7 @@ public class Partie {
     /**
      * Liste des codes de trophées existants.
      */
-    private String[] codesTropheesExistants = {
+    private final String[] codesTropheesExistants = {
             "M2","M3","M4","MA","J","HT","HP","HCA","HCO",
             "NB2","NB3","NB4","NBA","LCA","LCO","LT","LP","BJNJ","BJ"
     };
@@ -84,7 +84,7 @@ public class Partie {
     public Partie() {}
     /**
      * Crée le paquet de base du jeu Jest.
-     *
+     * <p>
      * Le paquet contient les cartes "classiques" du jeu ainsi qu'un Joker.
      * Chaque carte est associée à un code de trophée.
      *
@@ -203,7 +203,7 @@ public class Partie {
     }
     /**
      * Configure les joueurs de la partie.
-     *
+     * <p>
      * Permet de choisir le nombre de joueurs,
      * leur nom et leur type (humain ou ordinateur).
      */
@@ -259,7 +259,7 @@ public class Partie {
     }
     /**
      * Configure le paquet de cartes utilisé pour la partie.
-     *
+     * <p>
      * Le paquet de base est créé, puis l'utilisateur peut
      * ajouter des cartes spéciales.
      */
@@ -285,7 +285,7 @@ public class Partie {
     }
     /**
      * Crée une carte "extension" à partir des choix de l'utilisateur.
-     *
+     * <p>
      * L'utilisateur peut créer :
      * - une carte normale (caractère + couleur + code trophée)
      * - un Joker (sans caractère ni couleur) avec un code trophée
@@ -300,22 +300,20 @@ public class Partie {
 
         Carte.Caractere caractere = null;
 
-        if (reponseCaractere.equals("2")) {
-            caractere = Carte.Caractere.Deux;
-        } else if (reponseCaractere.equals("3")) {
-            caractere = Carte.Caractere.Trois;
-        } else if (reponseCaractere.equals("4")) {
-            caractere = Carte.Caractere.Quatre;
-        } else if (reponseCaractere.equals("AS")) {
-            caractere = Carte.Caractere.As;
-        } else {
-            System.out.println("Sélectionnez un code trophée pour le joker (ex : BJ) :");
-            String reponseTrophee = scanner.nextLine().trim().toUpperCase();
-            while(!java.util.Arrays.asList(codesTropheesExistants).contains(reponseTrophee)) {
-                System.out.println("Choix invalide. Choisissez la couleur de la carte à créer (Carreau (ca), Coeur (co), Trefle (t), Pique (p)) :");
-                reponseTrophee = scanner.nextLine().trim().toUpperCase();
+        switch (reponseCaractere) {
+            case "2" -> caractere = Carte.Caractere.Deux;
+            case "3" -> caractere = Carte.Caractere.Trois;
+            case "4" -> caractere = Carte.Caractere.Quatre;
+            case "AS" -> caractere = Carte.Caractere.As;
+            default -> {
+                System.out.println("Sélectionnez un code trophée pour le joker (ex : BJ) :");
+                String reponseTrophee = scanner.nextLine().trim().toUpperCase();
+                while (!java.util.Arrays.asList(codesTropheesExistants).contains(reponseTrophee)) {
+                    System.out.println("Choix invalide. Choisissez la couleur de la carte à créer (Carreau (ca), Coeur (co), Trefle (t), Pique (p)) :");
+                    reponseTrophee = scanner.nextLine().trim().toUpperCase();
+                }
+                return new Carte(caractere, null, true, reponseTrophee);
             }
-            return new Carte(caractere, null, true, reponseTrophee);
         }
 
         System.out.println("Choisissez la couleur de la carte à créer (Carreau (ca), Coeur (co), Trefle (t), Pique (p)) :");
@@ -325,17 +323,12 @@ public class Partie {
             reponseCouleur = scanner.nextLine().trim().toUpperCase();
         }
 
-        Carte.Couleurs couleur = null;
-
-        if (reponseCouleur.equals("CA")) {
-            couleur = Carte.Couleurs.Carreau;
-        } else if (reponseCouleur.equals("CO")) {
-            couleur = Carte.Couleurs.Coeur;
-        } else if (reponseCouleur.equals("T")) {
-            couleur = Carte.Couleurs.Trefle;
-        } else {
-            couleur = Carte.Couleurs.Pique;
-        }
+        Carte.Couleurs couleur = switch (reponseCouleur) {
+            case "CA" -> Carte.Couleurs.Carreau;
+            case "CO" -> Carte.Couleurs.Coeur;
+            case "T" -> Carte.Couleurs.Trefle;
+            default -> Carte.Couleurs.Pique;
+        };
 
         String[] codesTropheesExistants = {"M2","M3","M4", "MA", "J", "HT", "HP", "HCA", "HCO", "NB2", "NB3", "NB4", "NBA", "LCA", "LCO", "LT", "LP", "BJNJ", "BJ"};
         System.out.println("Choisissez le code trophée de la nouvelle carte :");
@@ -349,7 +342,7 @@ public class Partie {
     }
     /**
      * Lance et gère le déroulement complet de la partie.
-     *
+     * <p>
      * La partie se déroule par manches successives jusqu'à
      * ce que la condition de fin soit atteinte.
      */
@@ -461,55 +454,55 @@ public class Partie {
 
                 String ligne = sc.nextLine();
 
-                if (ligne.equals("JOUEUR")) {
+                switch (ligne) {
+                    case "JOUEUR" -> {
 
-                    String type = sc.nextLine();
-                    String nom = sc.nextLine();
-                    int score = Integer.parseInt(sc.nextLine());
+                        String type = sc.nextLine();
+                        String nom = sc.nextLine();
+                        int score = Integer.parseInt(sc.nextLine());
 
-                    Joueur j;
-                    if (type.equals("HUMAIN")) {
-                        j = new Humain(nom);
-                    } else {
-                        Ordinateur o = new Ordinateur(nom);
-                        o.setStrategie(new Strategie1()); // IMPORTANT
-                        j = o;
-                    }
-                    j.setScore(score);
+                        Joueur j;
+                        if (type.equals("HUMAIN")) {
+                            j = new Humain(nom);
+                        } else {
+                            Ordinateur o = new Ordinateur(nom);
+                            o.setStrategie(new Strategie1()); // IMPORTANT
+                            j = o;
+                        }
+                        j.setScore(score);
 
-                    sc.nextLine();
-                    ligne = sc.nextLine();
-                    while (!ligne.equals("JEST")) {
-                        j.getMain().ajouterCarte(lireCarte(ligne, sc));
+                        sc.nextLine();
                         ligne = sc.nextLine();
-                    }
+                        while (!ligne.equals("JEST")) {
+                            j.getMain().ajouterCarte(lireCarte(ligne, sc));
+                            ligne = sc.nextLine();
+                        }
 
-                    ligne = sc.nextLine();
-                    while (!ligne.equals("OFFRE")) {
-                        j.getJest().ajouterCarte(lireCarte(ligne, sc));
                         ligne = sc.nextLine();
+                        while (!ligne.equals("OFFRE")) {
+                            j.getJest().ajouterCarte(lireCarte(ligne, sc));
+                            ligne = sc.nextLine();
+                        }
+
+                        Carte v = lireCarte(sc.nextLine(), sc);
+                        Carte c = lireCarte(sc.nextLine(), sc);
+                        if (v != null || c != null) {
+                            j.setOffre(new Offre(v, c));
+                        }
+
+                        joueurs.add(j);
                     }
-
-                    Carte v = lireCarte(sc.nextLine(), sc);
-                    Carte c = lireCarte(sc.nextLine(), sc);
-                    if (v != null || c != null) {
-                        j.setOffre(new Offre(v, c));
-                    }
-
-                    joueurs.add(j);
-                }
-
-                else if (ligne.equals("PIOCHE")) {
-                    ligne = sc.nextLine();
-                    while (!ligne.equals("PAQUET_MANCHE")) {
-                        cartes.ajouterCarte(lireCarte(ligne, sc));
+                    case "PIOCHE" -> {
                         ligne = sc.nextLine();
+                        while (!ligne.equals("PAQUET_MANCHE")) {
+                            cartes.ajouterCarte(lireCarte(ligne, sc));
+                            ligne = sc.nextLine();
+                        }
                     }
-                }
-
-                else if (ligne.equals("PAQUET_MANCHE")) {
-                    while (sc.hasNextLine()) {
-                        paquetManche.ajouterCarte(lireCarte(sc.nextLine(), sc));
+                    case "PAQUET_MANCHE" -> {
+                        while (sc.hasNextLine()) {
+                            paquetManche.ajouterCarte(lireCarte(sc.nextLine(), sc));
+                        }
                     }
                 }
             }
@@ -525,7 +518,7 @@ public class Partie {
 
     /**
      * Écrit une carte dans un fichier de sauvegarde.
-     *
+     * <p>
      * Le format écrit correspond à celui attendu par la méthode lireCarte.
      * Si la carte est null, écrit "null" sur une seule ligne.
      *
@@ -544,11 +537,11 @@ public class Partie {
     }
     /**
      * Lit une carte depuis un fichier de sauvegarde.
-     *
+     * <p>
      * Le paramètre premiereLigne correspond à la première ligne déjà lue :
      * - "null" signifie que la carte est absente
      * - sinon, cette ligne contient le booléen estJoker
-     *
+     * <p>
      * Les lignes suivantes sont lues dans l'ordre :
      * - caractère (ou "null")
      * - couleur (ou "null")
@@ -710,15 +703,16 @@ public class Partie {
     }
     /**
      * Détermine le premier joueur à jouer lors de la sélection des offres.
-     *
+     * <p>
      * Le premier joueur est celui qui possède la meilleure carte face visible
      * (valeur la plus élevée, puis départage par couleur via l'ordre des enums).
      *
      * @return le joueur qui commence la phase de sélection des offres
      */
     public Joueur determinerPremierJoueur(){
-        Carte meilleureCarte = this.joueurs.getFirst().getOffre().getCarteFaceAvant();
-        Joueur premierJoueur = this.joueurs.get(0);
+        Joueur premierJoueur = this.joueurs.getFirst();
+        Carte meilleureCarte = premierJoueur.getOffre().getCarteFaceAvant();
+
         Carte.Couleurs couleur = null;
 
         for (Joueur joueur : this.joueurs) {
@@ -739,7 +733,7 @@ public class Partie {
     }
     /**
      * Constitue le paquet de manche à partir de la pioche principale.
-     *
+     * <p>
      * Si le paquet de manche est vide, on y place deux cartes par joueur.
      * Sinon, on mélange le paquet de manche et on y ajoute une carte par joueur.
      */
@@ -761,7 +755,7 @@ public class Partie {
 
     /**
      * Gère la sélection des offres par les joueurs.
-     *
+     * <p>
      * Les joueurs prennent les offres à tour de rôle
      * jusqu'à ce qu'il n'y ait plus d'offres disponibles.
      */
@@ -858,7 +852,7 @@ public class Partie {
     }
     /**
      * Indique s'il reste au moins une offre disponible.
-     *
+     * <p>
      * Une offre est considérée disponible si son statut est à true.
      *
      * @return true s'il reste des offres disponibles, false sinon
@@ -874,7 +868,7 @@ public class Partie {
     /**
      * Récupère les cartes restantes dans les offres des joueurs
      * et les remet dans le paquet de manche.
-     *
+     * <p>
      * Cette méthode est utile en début de manche pour éviter de perdre
      * des cartes non prises lors de la manche précédente.
      * Les cartes récupérées sont retirées des offres et l'offre est fermée.

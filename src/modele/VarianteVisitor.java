@@ -2,7 +2,7 @@ package modele;
 
 /**
  * Interface représentant une variante de calcul des scores.
- *
+ * <p>
  * Cette interface suit le principe du patron de conception Visitor.
  * Elle permet de définir différentes règles de calcul des scores
  * appliquées au Jest d'un joueur sans modifier la structure du jeu.

@@ -201,24 +201,24 @@ public class Phase3GuiView extends JFrame implements Observer {
             setLayout(new BorderLayout());
             setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-            JLabel owner = new JLabel("modele.Offre de " + offer.owner);
+            JLabel owner = new JLabel("modele.Offre de " + offer.getOwner());
             owner.setHorizontalAlignment(SwingConstants.CENTER);
             add(owner, BorderLayout.NORTH);
 
             JPanel cards = new JPanel(new GridLayout(1, 2, 8, 8));
 
-            JButton btnVisible = new JButton("<html><b>Visible</b><br>" + escapeHtml(offer.visibleText) + "</html>");
-            JButton btnHidden  = new JButton(offer.hasHiddenCard ? "<html><b>Cachée</b><br>???</html>" : "<html><b>Cachée</b><br>-</html>");
+            JButton btnVisible = new JButton("<html><b>Visible</b><br>" + escapeHtml(offer.getVisibleText()) + "</html>");
+            JButton btnHidden  = new JButton(offer.hasHiddenCard() ? "<html><b>Cachée</b><br>???</html>" : "<html><b>Cachée</b><br>-</html>");
 
             boolean canTakePhase = "WAIT_TAKE_HUMAN".equals(snap.getPhase());
-            boolean cibleOk = snap.getCiblesDisponibles() != null && snap.getCiblesDisponibles().contains(offer.owner);
-            boolean enabled = canTakePhase && cibleOk && offer.active;
+            boolean cibleOk = snap.getCiblesDisponibles() != null && snap.getCiblesDisponibles().contains(offer.getOwner());
+            boolean enabled = canTakePhase && cibleOk && offer.isActive();
 
             btnVisible.setEnabled(enabled);
-            btnHidden.setEnabled(enabled && offer.hasHiddenCard);
+            btnHidden.setEnabled(enabled && offer.hasHiddenCard());
 
-            btnVisible.addActionListener(e -> controller.takeOffer(offer.owner, false));
-            btnHidden.addActionListener(e -> controller.takeOffer(offer.owner, true));
+            btnVisible.addActionListener(e -> controller.takeOffer(offer.getOwner(), false));
+            btnHidden.addActionListener(e -> controller.takeOffer(offer.getOwner(), true));
 
             cards.add(btnVisible);
             cards.add(btnHidden);
@@ -226,7 +226,7 @@ public class Phase3GuiView extends JFrame implements Observer {
             add(cards, BorderLayout.CENTER);
 
 
-            JLabel footer = new JLabel(offer.active ? "ACTIVE" : "INACTIVE");
+            JLabel footer = new JLabel(offer.isActive() ? "ACTIVE" : "INACTIVE");
             footer.setHorizontalAlignment(SwingConstants.CENTER);
             add(footer, BorderLayout.SOUTH);
         }
@@ -264,10 +264,10 @@ public class Phase3GuiView extends JFrame implements Observer {
 
         sb.append("\nOFFRES:\n");
         for (OfferDTO o : snap.getOffres()) {
-            sb.append("- ").append(o.owner)
-                    .append(" | V=").append(o.visibleText)
-                    .append(" | C=").append(o.hasHiddenCard ? "(cachée)" : "-")
-                    .append(" | active=").append(o.active)
+            sb.append("- ").append(o.getOwner())
+                    .append(" | V=").append(o.getVisibleText())
+                    .append(" | C=").append(o.hasHiddenCard() ? "(cachée)" : "-")
+                    .append(" | active=").append(o.isActive())
                     .append("\n");
         }
 

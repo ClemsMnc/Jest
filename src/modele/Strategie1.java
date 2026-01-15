@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Implémentation d'une stratégie aléatoire.
- *
+ * <p>
  * Cette stratégie prend toutes ses décisions de manière aléatoire :
  * - les cartes choisies pour créer une offre
  * - l'offre à prendre
@@ -19,7 +19,7 @@ public class Strategie1 implements Strategie {
 
     /**
      * Crée une offre de manière aléatoire.
-     *
+     * <p>
      * Deux cartes sont choisies dans la main du joueur :
      * l'une devient face visible, l'autre face cachée.
      *
@@ -45,11 +45,11 @@ public class Strategie1 implements Strategie {
 
     /**
      * Prend une offre de manière aléatoire.
-     *
+     * <p>
      * La stratégie choisit aléatoirement :
      * - un joueur cible parmi ceux disposant d'une offre
      * - la carte à prendre (face visible ou face cachée)
-     *
+     * <p>
      * La carte prise est ajoutée au Jest du joueur.
      *
      * @param joueur le joueur ordinateur utilisant la stratégie

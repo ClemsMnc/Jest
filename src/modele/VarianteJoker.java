@@ -2,7 +2,7 @@ package modele;
 
 /**
  * Implémentation de la variante Joker de calcul des scores.
- *
+ * <p>
  * Cette variante s'appuie sur la variante normale et ajoute
  * un bonus lorsque certaines conditions liées au Joker
  * et aux cartes Coeur sont remplies.
@@ -12,11 +12,11 @@ public class VarianteJoker implements VarianteVisitor {
     /**
      * Instance de la variante normale utilisée comme base de calcul.
      */
-    private VarianteNormale base = new VarianteNormale();
+    private final VarianteNormale base = new VarianteNormale();
 
     /**
      * Calcule le score d'un Jest selon la variante Joker.
-     *
+     * <p>
      * Le score est d'abord calculé selon la variante normale.
      * Un bonus de 3 points est ensuite accordé si le Jest
      * contient au moins un Joker et au moins deux cartes Coeur.

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 /**
  * Représente un joueur humain dans le jeu Jest.
- *
+ * <p>
  * Un joueur humain interagit avec le jeu via le clavier.
  * Il choisit les cartes constituant son offre et sélectionne
  * les offres des autres joueurs lors de son tour.
@@ -20,7 +20,7 @@ public class Humain extends Joueur{
     }
     /**
      * Permet au joueur humain de créer une offre.
-     *
+     * <p>
      * Le joueur choisit quelle carte de sa main sera face cachée.
      * L'autre carte devient automatiquement la carte visible.
      * Après la création de l'offre, la main du joueur est vidée.
@@ -46,7 +46,7 @@ public class Humain extends Joueur{
     /**
      * Permet au joueur humain de prendre une carte dans l'offre
      * d'un autre joueur.
-     *
+     * <p>
      * La carte choisie (visible ou cachée) est ajoutée au Jest
      * du joueur humain, puis l'offre ciblée est fermée.
      *

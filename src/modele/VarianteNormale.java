@@ -5,7 +5,7 @@ import java.util.Map;
 
 /**
  * Implémentation de la variante normale de calcul des scores.
- *
+ * <p>
  * Cette variante applique les règles standards du jeu Jest :
  * - les cartes Pique et Trèfle rapportent des points
  * - les cartes Carreau font perdre des points
@@ -16,7 +16,7 @@ public class VarianteNormale implements VarianteVisitor {
 
     /**
      * Calcule le score d'un Jest selon la variante normale.
-     *
+     * <p>
      * Le calcul prend en compte :
      * - la couleur des cartes
      * - la valeur des cartes
@@ -109,11 +109,11 @@ public class VarianteNormale implements VarianteVisitor {
 
     /**
      * Calcule la valeur normale d'une carte.
-     *
+     * <p>
      * Les As valent :
      * - 5 points s'ils sont seuls de leur couleur
      * - 1 point sinon
-     *
+     * <p>
      * Les autres cartes conservent leur valeur brute.
      *
      * @param c la carte à évaluer

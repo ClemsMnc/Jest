@@ -24,11 +24,7 @@ public class Phase3Model extends Observable {
     private String lastMessage = "";
 
     public synchronized void publishState(String msg) {
-        if (msg == null) {
-            lastMessage = "";
-        } else {
-            lastMessage = msg;
-        }
+        lastMessage = Objects.requireNonNullElse(msg, "");
 
         publish();
     }

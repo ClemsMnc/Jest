@@ -2,11 +2,11 @@ package modele;
 
 /**
  * Représente une offre dans le jeu Jest.
- *
+ * <p>
  * Une offre est composée de deux cartes :
  * - une carte face visible
  * - une carte face cachée
- *
+ * <p>
  * Une offre est active tant qu'elle n'a pas été prise.
  */
 public class Offre {
@@ -39,7 +39,7 @@ public class Offre {
 
     /**
      * Permet de prendre une carte de l'offre.
-     *
+     * <p>
      * Si la carte face cachée est prise, la carte correspondante
      * est retirée de l'offre. Sinon, la carte face visible est prise.
      *
@@ -115,7 +115,7 @@ public class Offre {
 
     /**
      * Retourne une représentation textuelle de l'offre.
-     *
+     * <p>
      * La carte face cachée n'est jamais affichée.
      *
      * @return une chaîne représentant l'offre

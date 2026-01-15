@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Représente un joueur ordinateur dans le jeu Jest.
- *
+ * <p>
  * Un joueur ordinateur ne prend pas de décisions via des entrées clavier.
  * Toutes ses actions (création et prise d'offres) sont déléguées à une
  * stratégie associée.
@@ -27,7 +27,7 @@ public class Ordinateur extends Joueur {
 
     /**
      * Permet au joueur ordinateur de créer une offre.
-     *
+     * <p>
      * La création de l'offre est entièrement déléguée à la stratégie
      * associée au joueur.
      *
@@ -40,7 +40,7 @@ public class Ordinateur extends Joueur {
 
     /**
      * Permet au joueur ordinateur de prendre une offre.
-     *
+     * <p>
      * Le choix de l'offre et de la carte à prendre est entièrement
      * délégué à la stratégie associée au joueur.
      *

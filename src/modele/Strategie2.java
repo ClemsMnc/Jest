@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Implémentation d'une stratégie "intelligente".
- *
+ * <p>
  * Cette stratégie évalue les cartes en fonction de leur valeur,
  * de leur couleur et de la composition actuelle du Jest du joueur.
  * Elle cherche à maximiser le gain potentiel lors de la création
@@ -14,7 +14,7 @@ public class Strategie2 implements Strategie {
 
     /**
      * Crée une offre de manière stratégique.
-     *
+     * <p>
      * La carte ayant le score le plus faible est placée face visible,
      * tandis que la meilleure carte est placée face cachée afin de
      * limiter l'intérêt des adversaires.
@@ -102,7 +102,7 @@ public class Strategie2 implements Strategie {
 
     /**
      * Calcule un score heuristique pour une carte.
-     *
+     * <p>
      * Le score dépend :
      * - de la valeur de la carte
      * - de sa couleur
@@ -150,13 +150,12 @@ public class Strategie2 implements Strategie {
      * @return la valeur associée au caractère
      */
     public int scoreValeur(Carte c) {
-        switch (c.getCaractere()) {
-            case As:     return 1;
-            case Deux:   return 2;
-            case Trois:  return 3;
-            case Quatre: return 4;
-        }
-        return 0;
+        return switch (c.getCaractere()) {
+            case As -> 1;
+            case Deux -> 2;
+            case Trois -> 3;
+            case Quatre -> 4;
+        };
     }
 
     /**

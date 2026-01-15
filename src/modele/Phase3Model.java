@@ -393,7 +393,7 @@ public class Phase3Model extends Observable {
 
         ArrayList<String> main = new ArrayList<>();
         ArrayList<String> cibles = new ArrayList<>();
-        ArrayList<Phase3Snapshot.OfferDTO> offres = new ArrayList<>();
+        ArrayList<OfferDTO> offres = new ArrayList<>();
         ArrayList<String> scores = new ArrayList<>();
 
         boolean fin = (phase == Phase.END);
@@ -409,11 +409,11 @@ public class Phase3Model extends Observable {
             for (Joueur j : partie.getJoueurs()) {
                 Offre o = j.getOffre();
                 if (o == null) {
-                    offres.add(new Phase3Snapshot.OfferDTO(j.getNom(), "(pas d'offre)", false, false));
+                    offres.add(new OfferDTO(j.getNom(), "(pas d'offre)", false, false));
                 } else {
                     String visible = String.valueOf(o.getCarteFaceAvant());
                     boolean hasHidden = (o.getCarteFaceCachee() != null);
-                    offres.add(new Phase3Snapshot.OfferDTO(j.getNom(), visible, hasHidden, o.getStatutOffre()));
+                    offres.add(new OfferDTO(j.getNom(), visible, hasHidden, o.getStatutOffre()));
                 }
             }
 

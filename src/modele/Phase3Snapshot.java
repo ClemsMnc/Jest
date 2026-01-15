@@ -3,19 +3,6 @@ package modele;
 import java.util.List;
 
 public class Phase3Snapshot {
-    public static class OfferDTO {
-        public final String owner;
-        public final String visibleText;
-        public final boolean hasHiddenCard;
-        public final boolean active;
-
-        public OfferDTO(String owner, String visibleText, boolean hasHiddenCard, boolean active) {
-            this.owner = owner;
-            this.visibleText = visibleText;
-            this.hasHiddenCard = hasHiddenCard;
-            this.active = active;
-        }
-    }
 
     private final String phase;
     private final String message;

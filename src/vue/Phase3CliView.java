@@ -1,6 +1,7 @@
 package vue;
 
 import controleur.Phase3Controller;
+import modele.OfferDTO;
 import modele.Phase3Snapshot;
 
 import java.io.BufferedReader;
@@ -147,7 +148,7 @@ public class Phase3CliView implements Observer, Runnable {
         sb.append("modele.Joueur courant: ").append(snap.getJoueurCourant() == null ? "-" : snap.getJoueurCourant()).append("\n");
 
         sb.append("\nOFFRES:\n");
-        for (Phase3Snapshot.OfferDTO o : snap.getOffres()) {
+        for (OfferDTO o : snap.getOffres()) {
             sb.append("- ").append(o.owner)
                     .append(" | V=").append(o.visibleText)
                     .append(" | C=").append(o.hasHiddenCard ? "(cachée)" : "-")

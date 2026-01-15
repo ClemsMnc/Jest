@@ -2,6 +2,7 @@ package vue;
 
 import controleur.Phase3Controller;
 import modele.Phase3Snapshot;
+import modele.OfferDTO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -161,7 +162,7 @@ public class Phase3GuiView extends JFrame implements Observer {
         }
 
 
-        for (Phase3Snapshot.OfferDTO o : snap.getOffres()) {
+        for (OfferDTO o : snap.getOffres()) {
             tablePanel.add(new OfferPanel(o, snap));
         }
 
@@ -196,7 +197,7 @@ public class Phase3GuiView extends JFrame implements Observer {
     }
 
     private class OfferPanel extends JPanel {
-        OfferPanel(Phase3Snapshot.OfferDTO offer, Phase3Snapshot snap) {
+        OfferPanel(OfferDTO offer, Phase3Snapshot snap) {
             setLayout(new BorderLayout());
             setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
@@ -262,7 +263,7 @@ public class Phase3GuiView extends JFrame implements Observer {
         sb.append("modele.Joueur courant: ").append(snap.getJoueurCourant() == null ? "-" : snap.getJoueurCourant()).append("\n");
 
         sb.append("\nOFFRES:\n");
-        for (Phase3Snapshot.OfferDTO o : snap.getOffres()) {
+        for (OfferDTO o : snap.getOffres()) {
             sb.append("- ").append(o.owner)
                     .append(" | V=").append(o.visibleText)
                     .append(" | C=").append(o.hasHiddenCard ? "(cachée)" : "-")

@@ -154,14 +154,14 @@ public class Phase3GuiView extends JFrame implements Observer {
     private void rebuildTable(Phase3Snapshot snap) {
         tablePanel.removeAll();
 
-        if (snap.offres == null) {
+        if (snap.getOffres() == null) {
             tablePanel.revalidate();
             tablePanel.repaint();
             return;
         }
 
 
-        for (Phase3Snapshot.OfferDTO o : snap.offres) {
+        for (Phase3Snapshot.OfferDTO o : snap.getOffres()) {
             tablePanel.add(new OfferPanel(o, snap));
         }
 
@@ -172,7 +172,7 @@ public class Phase3GuiView extends JFrame implements Observer {
     private void rebuildHand(Phase3Snapshot snap) {
         handPanel.removeAll();
 
-        boolean waitOffer = "WAIT_OFFER_HUMAN".equals(snap.phase) && snap.mainHumaine != null && snap.mainHumaine.size() == 2;
+        boolean waitOffer = "WAIT_OFFER_HUMAN".equals(snap.getPhase()) && snap.getMainHumaine() != null && snap.getMainHumaine().size() == 2;
 
         if (!waitOffer) {
             handPanel.add(new JLabel("—"));
@@ -182,8 +182,8 @@ public class Phase3GuiView extends JFrame implements Observer {
         }
 
 
-        JButton c0 = new JButton("<html><b>modele.Carte 0</b><br>" + escapeHtml(snap.mainHumaine.get(0)) + "<br><i>(cliquer = CACHÉE)</i></html>");
-        JButton c1 = new JButton("<html><b>modele.Carte 1</b><br>" + escapeHtml(snap.mainHumaine.get(1)) + "<br><i>(cliquer = CACHÉE)</i></html>");
+        JButton c0 = new JButton("<html><b>modele.Carte 0</b><br>" + escapeHtml(snap.getMainHumaine().get(0)) + "<br><i>(cliquer = CACHÉE)</i></html>");
+        JButton c1 = new JButton("<html><b>modele.Carte 1</b><br>" + escapeHtml(snap.getMainHumaine().get(1)) + "<br><i>(cliquer = CACHÉE)</i></html>");
 
         c0.addActionListener(e -> controller.offerHiddenIndex(0));
         c1.addActionListener(e -> controller.offerHiddenIndex(1));
@@ -209,8 +209,8 @@ public class Phase3GuiView extends JFrame implements Observer {
             JButton btnVisible = new JButton("<html><b>Visible</b><br>" + escapeHtml(offer.visibleText) + "</html>");
             JButton btnHidden  = new JButton(offer.hasHiddenCard ? "<html><b>Cachée</b><br>???</html>" : "<html><b>Cachée</b><br>-</html>");
 
-            boolean canTakePhase = "WAIT_TAKE_HUMAN".equals(snap.phase);
-            boolean cibleOk = snap.ciblesDisponibles != null && snap.ciblesDisponibles.contains(offer.owner);
+            boolean canTakePhase = "WAIT_TAKE_HUMAN".equals(snap.getPhase());
+            boolean cibleOk = snap.getCiblesDisponibles() != null && snap.getCiblesDisponibles().contains(offer.owner);
             boolean enabled = canTakePhase && cibleOk && offer.active;
 
             btnVisible.setEnabled(enabled);
@@ -236,19 +236,73 @@ public class Phase3GuiView extends JFrame implements Observer {
         return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
     }
 
+    public String toGuiString(Phase3Snapshot snap) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== JEST | ").append(snap.getPhase()).append(" ===\n");
+        if (snap.getMessage() != null && !snap.getMessage().isBlank()) sb.append(snap.getMessage()).append("\n");
+
+        if (snap.getPhase().startsWith("SETUP")) {
+            sb.append("\nCONFIG:\n");
+            sb.append("- nb joueurs attendu: ").append(snap.getNbJoueursAttendu()).append("\n");
+            sb.append("- nb joueurs actuel : ").append(snap.getNbJoueursActuel()).append("\n");
+            sb.append("- variante          : ").append(snap.getVariante()).append("\n");
+            sb.append("- joueurs:\n");
+            for (String j : snap.getJoueursConfig()) sb.append("  * ").append(j).append("\n");
+
+            sb.append("\nCommandes:\n");
+            sb.append("players <n>\n");
+            sb.append("human <Nom>\n");
+            sb.append("ai <Nom> s1|s2\n");
+            sb.append("variant normale|joker|couleur\n");
+            sb.append("start\n");
+            return sb.toString();
+        }
+
+        sb.append("\nMANCHE: ").append(snap.getManche()).append("\n");
+        sb.append("modele.Joueur courant: ").append(snap.getJoueurCourant() == null ? "-" : snap.getJoueurCourant()).append("\n");
+
+        sb.append("\nOFFRES:\n");
+        for (Phase3Snapshot.OfferDTO o : snap.getOffres()) {
+            sb.append("- ").append(o.owner)
+                    .append(" | V=").append(o.visibleText)
+                    .append(" | C=").append(o.hasHiddenCard ? "(cachée)" : "-")
+                    .append(" | active=").append(o.active)
+                    .append("\n");
+        }
+
+        sb.append("\nSCORES/JEST:\n");
+        for (String s : snap.getScoresAffichage()) sb.append(s).append("\n");
+
+        if (snap.getMainHumaine() != null && !snap.getMainHumaine().isEmpty()) {
+            sb.append("\nMAIN (cliquer/cmd offer 0|1):\n");
+            for (int i = 0; i < snap.getMainHumaine().size(); i++) sb.append(i).append(") ").append(snap.getMainHumaine().get(i)).append("\n");
+        }
+
+        if (snap.getCiblesDisponibles() != null && !snap.getCiblesDisponibles().isEmpty()) {
+            sb.append("\nCIBLES DISPONIBLES:\n");
+            for (String c : snap.getCiblesDisponibles()) sb.append("- ").append(c).append("\n");
+            sb.append("Commande: take <Nom> visible|cachee\n");
+        }
+
+        sb.append("\nCommande générique: next\n");
+        if (snap.isPartieFinie()) sb.append("\n*** FIN DE PARTIE ***\n");
+        return sb.toString();
+    }
+
+
     @Override
     public void update(Observable o, Object arg) {
         if (!(arg instanceof Phase3Snapshot snap)) return;
         lastSnap = snap;
 
         SwingUtilities.invokeLater(() -> {
-            lblTop.setText("Phase=" + snap.phase + " | manche=" + snap.manche + " | joueur=" + (snap.joueurCourant == null ? "-" : snap.joueurCourant));
-            areaLog.setText(snap.toCliString());
+            lblTop.setText("Phase=" + snap.getPhase() + " | manche=" + snap.getManche() + " | joueur=" + (snap.getJoueurCourant() == null ? "-" : snap.getJoueurCourant()));
+            areaLog.setText(toGuiString(snap));
 
             rebuildTable(snap);
             rebuildHand(snap);
 
-            if (snap.partieFinie) {
+            if (snap.isPartieFinie()) {
                 btnNext.setEnabled(false);
                 btnStart.setEnabled(false);
                 btnAdd.setEnabled(false);
@@ -257,5 +311,4 @@ public class Phase3GuiView extends JFrame implements Observer {
             }
         });
     }
-
 }

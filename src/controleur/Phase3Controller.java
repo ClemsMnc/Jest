@@ -2,7 +2,7 @@ package controleur;
 import modele.Phase3Model;
 
 public class Phase3Controller {
-
+    /** Contrôleur MVC  */
     private final Phase3Model model;
 
     public Phase3Controller(Phase3Model model) {
@@ -21,6 +21,7 @@ public class Phase3Controller {
 
     public void next() { model.next(); }
 
+    /** choisir la carte cachée pour créer l'offre */
     public void offerHiddenIndex(int idx) { model.humanCreateOffer(idx); }
 
     public void takeOffer(String cibleNom, boolean prendreCachee) { model.humanTakeOffer(cibleNom, prendreCachee); }

@@ -3,7 +3,7 @@ package modele;
 import java.util.List;
 
 public class Phase3Snapshot {
-
+    /** Snapshot (photo) de l'état affichable */
     private final String phase;
     private final String message;
 

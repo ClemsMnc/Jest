@@ -13,7 +13,7 @@ import java.util.Observer;
 public class Phase3CliView implements Observer, Runnable {
 
     private final Phase3Controller controller;
-
+    /** Vue CLI (console) */
     public Phase3CliView(Phase3Controller controller) {
         this.controller = controller;
         System.out.println("CLI active.");
@@ -21,6 +21,7 @@ public class Phase3CliView implements Observer, Runnable {
         System.out.println("JEU   : next | offer 0|1 | take <Nom> visible|cachee");
     }
 
+    /** Boucle de lecture console */
     @Override
     public void run() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -121,7 +122,7 @@ public class Phase3CliView implements Observer, Runnable {
             }
         }
     }
-
+    /** Transforme un snapshot en texte affichable dans la console. */
     public String toCliString(Phase3Snapshot snap) {
         StringBuilder sb = new StringBuilder();
         sb.append("=== JEST | ").append(snap.getPhase()).append(" ===\n");
@@ -175,6 +176,7 @@ public class Phase3CliView implements Observer, Runnable {
         return sb.toString();
     }
 
+    /** Reçoit les snapshots du modèle et les affiche immédiatement. */
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof Phase3Snapshot snap) {

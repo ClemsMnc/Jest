@@ -3,7 +3,7 @@ package modele;
 import java.util.*;
 
 public class Phase3Model extends Observable {
-
+    /** Modèle MVC */
     private enum Phase { SETUP, DEAL, WAIT_OFFER_HUMAN, TAKE, WAIT_TAKE_HUMAN, END }
     private Phase phase = Phase.SETUP;
 
@@ -23,12 +23,13 @@ public class Phase3Model extends Observable {
 
     private String lastMessage = "";
 
+    /** Met à jour le message d'état et notifie les vues. */
     public synchronized void publishState(String msg) {
         lastMessage = Objects.requireNonNullElse(msg, "");
 
         publish();
     }
-
+    /** Configuration : définit le nombre de joueurs (2..6). */
     public synchronized void setNbJoueurs(int n) {
         if (phase != Phase.SETUP) {
             publishState("Impossible: déjà démarré.");
@@ -42,6 +43,7 @@ public class Phase3Model extends Observable {
         publishState("nb joueurs attendu = " + n);
     }
 
+    /** Configuration : ajoute un joueur humain. */
     public synchronized void addHuman(String nom) {
         if (phase != Phase.SETUP) {
             publishState("Impossible: déjà démarré."); return;
@@ -65,6 +67,7 @@ public class Phase3Model extends Observable {
         publishState("Ajout humain: " + nom);
     }
 
+    /** Configuration : ajoute un ordinateur (strat 1 ou 2). */
     public synchronized void addAI(String nom, int strat) {
         if (phase != Phase.SETUP) {
             publishState("Impossible: déjà démarré.");
@@ -101,7 +104,7 @@ public class Phase3Model extends Observable {
             publishState("Ajout ordi: " + nom + " (s1)");
         }
     }
-
+    /** Configuration : choisit la variante (normale|joker|couleur). */
     public synchronized void setVariante(String v) {
         if (phase != Phase.SETUP) { publishState("Impossible: déjà démarré.");
             return;
@@ -120,6 +123,7 @@ public class Phase3Model extends Observable {
         publishState("Variante = " + s);
     }
 
+    /** Lance la partie à partir de la config, puis avance jusqu'à une action humaine. */
     public synchronized void startGame() {
         if (phase != Phase.SETUP) {
             publishState("Déjà démarré.");
@@ -156,7 +160,7 @@ public class Phase3Model extends Observable {
         autoAdvanceUntilHumanNeeded();
         publish();
     }
-
+    /** choix de la carte cachée (0 ou 1) pour créer l'offre */
     public synchronized void humanCreateOffer(int idx) {
         if (phase != Phase.WAIT_OFFER_HUMAN || currentHumanOffer == null) {
             publishState("Pas en attente d'offre.");
@@ -191,7 +195,7 @@ public class Phase3Model extends Observable {
         autoAdvanceUntilHumanNeeded();
         publish();
     }
-
+    /** prendre une offre (visible/cachée) */
     public synchronized void humanTakeOffer(String cibleNom, boolean prendreCachee) {
         if (phase != Phase.WAIT_TAKE_HUMAN || joueurCourant == null) {
             publishState("Pas en attente de prise.");
@@ -438,6 +442,7 @@ public class Phase3Model extends Observable {
                 fin
         );
     }
+    /** Sauvegarde (autorisé uniquement entre deux manches) */
     public synchronized void saveGame(String file) {
 
         if (phase != Phase.DEAL) {
@@ -458,6 +463,7 @@ public class Phase3Model extends Observable {
         }
     }
 
+    /** Charge une sauvegarde (autorisé uniquement au début). */
     public synchronized void loadGame(String file) {
 
 

@@ -10,7 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
-
+/** Vue GUI (Swing) */
 public class Phase3GuiView extends JFrame implements Observer {
 
     private final Phase3Controller controller;
@@ -33,7 +33,7 @@ public class Phase3GuiView extends JFrame implements Observer {
 
 
     private final JButton btnNext = new JButton("Next");
-
+    /** Construit la fenêtre, branche les listeners et affiche l'IHM. */
     public Phase3GuiView(Phase3Controller controller) {
         super("Jest - Phase 3 (Table cliquable)");
         this.controller = controller;
@@ -149,7 +149,7 @@ public class Phase3GuiView extends JFrame implements Observer {
         setLocationRelativeTo(null);
     }
 
-
+    /** Reconstruit l'affichage de la table (offres) à partir du snapshot. */
     private void rebuildTable(Phase3Snapshot snap) {
         tablePanel.removeAll();
 
@@ -168,6 +168,7 @@ public class Phase3GuiView extends JFrame implements Observer {
         tablePanel.repaint();
     }
 
+    /** Reconstruit l'affichage de la main humaine quand on attend la création d'offre. */
     private void rebuildHand(Phase3Snapshot snap) {
         handPanel.removeAll();
 
@@ -193,7 +194,7 @@ public class Phase3GuiView extends JFrame implements Observer {
         handPanel.revalidate();
         handPanel.repaint();
     }
-
+    /** Panneau d'une offre  */
     private class OfferPanel extends JPanel {
         OfferPanel(OfferDTO offer, Phase3Snapshot snap) {
             setLayout(new BorderLayout());
@@ -235,6 +236,7 @@ public class Phase3GuiView extends JFrame implements Observer {
         return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
     }
 
+    /** Transforme un snapshot en texte "log" affiché à droite. */
     public String toGuiString(Phase3Snapshot snap) {
         StringBuilder sb = new StringBuilder();
         sb.append("=== JEST | ").append(snap.getPhase()).append(" ===\n");
@@ -288,7 +290,7 @@ public class Phase3GuiView extends JFrame implements Observer {
         return sb.toString();
     }
 
-
+    /** Reçoit le snapshot et met à jour l'IHM Swing. */
     @Override
     public void update(Observable o, Object arg) {
         if (!(arg instanceof Phase3Snapshot snap)) return;

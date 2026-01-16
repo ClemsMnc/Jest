@@ -4,6 +4,7 @@ import vue.Phase3CliView;
 import vue.Phase3GuiView;
 
 public class Phase3Main {
+    /** Main, lancement du jeu. Attention, bien fixer le nombre de joueur avant de les ajouter. */
 
     public static void main(String[] args) {
 
